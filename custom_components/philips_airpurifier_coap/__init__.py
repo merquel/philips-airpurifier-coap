@@ -49,13 +49,21 @@ class ListingView(HomeAssistantView):
 
     requires_auth = False
 
-    def __init__(self, hass: HomeAssistant, url) -> None:  # noqa: D107
-        self._hass = hass
+    def __init__(self, url, iconpath) -> None:
         self.url = url
+        self.iconpath = iconpath
         self.name = "Icon Listing"
 
-    async def get(self, request):  # noqa: D102
-        return json.dumps(self._hass.data[DOMAIN][ICONS])
+    async def get(self, request):
+        icons = []
+        for (dirpath, dirnames, filenames) in walk(self.iconpath):
+            icons.extend(
+                [
+                    {"name": path.join(dirpath[len(self.iconpath):], fn[:-4])}
+                    for fn in filenames if fn.endswith(".svg")
+                ]
+            )
+        return json.dumps(icons)
 
 
 async def async_setup(hass: HomeAssistant, config) -> bool:
@@ -67,28 +75,8 @@ async def async_setup(hass: HomeAssistant, config) -> bool:
 
     iset = PAP
     iconpath = hass.config.path(ICONS_PATH + "/" + iset)
-
-    # walk the directory to get the icons
-    icons = []
-    for dirpath, _dirnames, filenames in walk(iconpath):
-        icons.extend(
-            [
-                {"name": path.join(dirpath[len(iconpath) :], fn[:-4])}
-                for fn in filenames
-                if fn.endswith(".svg")
-            ]
-        )
-
-    # store icons
-    data = hass.data.get(DOMAIN)
-    if data is None:
-        hass.data[DOMAIN] = {}
-
-    hass.data[DOMAIN][ICONS] = icons
-
-    # register path and view
-    hass.http.register_static_path(ICONS_URL + "/" + iset, iconpath, True)
-    hass.http.register_view(ListingView(hass, ICONLIST_URL + "/" + iset))
+    await hass.http.async_register_static_paths([StaticPathConfig(ICONS_URL + "/" + iset, iconpath, True)])
+    hass.http.register_view(ListingView(ICONLIST_URL + "/" + iset, iconpath))
 
     return True
 
