@@ -12,6 +12,7 @@ from aioairctrl import CoAPClient
 from getmac import get_mac_address
 
 from homeassistant.components.frontend import add_extra_js_url
+from homeassistant.components.http import StaticPathConfig
 from homeassistant.components.http.view import HomeAssistantView
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST
@@ -61,7 +62,7 @@ async def async_setup(hass: HomeAssistant, config) -> bool:
     """Set up the icons for the Philips AirPurifier integration."""
     _LOGGER.debug("async_setup called")
 
-    hass.http.register_static_path(LOADER_URL, hass.config.path(LOADER_PATH), True)
+    await hass.http.async_register_static_paths([StaticPathConfig(LOADER_URL, hass.config.path(LOADER_PATH), True)])
     add_extra_js_url(hass, LOADER_URL)
 
     iset = PAP
