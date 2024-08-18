@@ -599,6 +599,10 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
     # },
 }
 
+
+
+EXTRA_SENSOR_TYPES: dict[str, SensorDescription] = {}
+
 BINARY_SENSOR_TYPES: dict[str, SensorDescription] = {
     # binary device sensors
     PhilipsApi.ERROR_CODE: {
