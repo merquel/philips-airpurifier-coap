@@ -21,7 +21,7 @@ Due to a bug in the Philips devices, this integration is rather instable. It mig
 
 It all goes back to some reverse engineering by @rgerganov and you can read about it here: https://xakcop.com/post/ctrl-air-purifier/
 
-Philips has recently introduced a proper API to remote control the devices. However, this only works with the Philips cloud and it is not public (yet?) but only integrates Google Home, Alexa and IFTTT. Using IFTTT with HA might be a more stable choice: https://ifttt.com/Philips_air_purifer
+Philips has recently introduced a proper API to remote control the devices. However, this only works with the Philips cloud and it is not public (yet?) but only integrates Google Home and Alexa. It used to integrate IFTTT as well, but that seems discontinued.
 
 
 ## Credits
