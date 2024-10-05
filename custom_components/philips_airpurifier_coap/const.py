@@ -1,4 +1,5 @@
 """Constants for Philips AirPurifier integration."""
+
 from __future__ import annotations
 
 from enum import StrEnum
@@ -97,7 +98,9 @@ DIMMABLE = "dimmable"
 class FanModel(StrEnum):
     """Supported fan models."""
 
-    AC0850 = "AC0850"
+    AC0850_11 = "AC0850/11 AWS_Philips_AIR"
+    AC0850_11C = "AC0850/11 AWS_Philips_AIR_Combo"
+    AC0850_31 = "AC0850/31"
     AC1214 = "AC1214"
     AC1715 = "AC1715"
     AC2729 = "AC2729"
@@ -599,7 +602,6 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
     #     CONF_ENTITY_CATEGORY: EntityCategory.DIAGNOSTIC,
     # },
 }
-
 
 
 EXTRA_SENSOR_TYPES: dict[str, SensorDescription] = {}
