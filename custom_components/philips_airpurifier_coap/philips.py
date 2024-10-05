@@ -1,4 +1,5 @@
 """Collection of classes to manage Philips AirPurifier devices."""
+
 from __future__ import annotations
 
 import asyncio
@@ -383,7 +384,11 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
     @property
     def supported_features(self) -> int:
         """Return the supported features."""
-        features = FanEntityFeature.PRESET_MODE | FanEntityFeature.TURN_OFF | FanEntityFeature.TURN_ON
+        features = (
+            FanEntityFeature.PRESET_MODE
+            | FanEntityFeature.TURN_OFF
+            | FanEntityFeature.TURN_ON
+        )
         if self._speeds:
             features |= FanEntityFeature.SET_SPEED
         if self.KEY_OSCILLATION is not None:
@@ -641,8 +646,13 @@ class PhilipsHumidifierMixin(PhilipsGenericCoAPFanBase):
 
 # similar to the AC1715, the AC0850 seems to be a new class of devices that
 # follows some patterns of its own
-class PhilipsAC0850(PhilipsNewGenericCoAPFan):
-    """AC0850."""
+
+
+# the AC0850/11 comes in two versions.
+# the first version has a Wifi string starting with "AWS_Philips_AIR"
+# the second version has a Wifi string starting with "AWS_Philips_AIR_Combo"
+class PhilipsAC085011(PhilipsNewGenericCoAPFan):
+    """AC0850/11 with firmware AWS_Philips_AIR."""
 
     AVAILABLE_PRESET_MODES = {
         PresetMode.AUTO: {
@@ -658,6 +668,29 @@ class PhilipsAC0850(PhilipsNewGenericCoAPFan):
     }
     # the prefilter data is present but doesn't change for this device, so let's take it out
     UNAVAILABLE_FILTERS = [PhilipsApi.FILTER_NANOPROTECT_PREFILTER]
+
+
+class PhilipsAC085011C(PhilipsAC085011):
+    """AC0850/11 with firmware AWS_Philips_AIR_Combo."""
+
+    AVAILABLE_PRESET_MODES = {
+        PresetMode.AUTO: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 0,
+        },
+        PresetMode.TURBO: {PhilipsApi.NEW2_POWER: 1, PhilipsApi.NEW2_MODE_B: 18},
+        PresetMode.SLEEP: {PhilipsApi.NEW2_POWER: 1, PhilipsApi.NEW2_MODE_B: 17},
+    }
+    AVAILABLE_SPEEDS = {
+        PresetMode.SLEEP: {PhilipsApi.NEW2_POWER: 1, PhilipsApi.NEW2_MODE_B: 17},
+        PresetMode.TURBO: {PhilipsApi.NEW2_POWER: 1, PhilipsApi.NEW2_MODE_B: 18},
+    }
+    # the prefilter data is present but doesn't change for this device, so let's take it out
+    UNAVAILABLE_FILTERS = [PhilipsApi.FILTER_NANOPROTECT_PREFILTER]
+
+
+class PhilipsAC085031(PhilipsAC085011C):
+    """AC0850/31."""
 
 
 # the AC1715 seems to be a new class of devices that follows some patterns of its own
@@ -1786,7 +1819,9 @@ class PhilipsCX5120(PhilipsNew2GenericCoAPFan):
 
 
 model_to_class = {
-    FanModel.AC0850: PhilipsAC0850,
+    FanModel.AC0850_11: PhilipsAC085011,
+    FanModel.AC0850_11C: PhilipsAC085011C,
+    FanModel.AC0850_31: PhilipsAC085031,
     FanModel.AC1214: PhilipsAC1214,
     FanModel.AC1715: PhilipsAC1715,
     FanModel.AC2729: PhilipsAC2729,
