@@ -393,7 +393,6 @@ class PhilipsApi:
     NEW2_AUTO_PLUS_AI = "D03180"
     NEW2_PREFERRED_INDEX = "D0312A#1"
     NEW2_GAS_PREFERRED_INDEX = "D0312A#2"
-    NEW2_ERROR_CODE = "D03240 "
 
     PREFERRED_INDEX_MAP = {
         0: ("Indoor Allergen Index", ICON.IAI),

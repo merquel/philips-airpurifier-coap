@@ -213,7 +213,7 @@ class PhilipsAirPurifierConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             try:
                 # first some sanitycheck on the host input
                 if not host_valid(user_input[CONF_HOST]):
-                    raise InvalidHost()
+                    raise InvalidHost  # noqa: TRY301
                 self._host = user_input[CONF_HOST]
                 _LOGGER.debug("trying to configure host: %s", self._host)
 
