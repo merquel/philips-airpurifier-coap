@@ -8,7 +8,7 @@ from collections.abc import Callable
 import contextlib
 from datetime import timedelta
 import logging
-from typing import Any, Optional, Union
+from typing import Any
 
 from aioairctrl import CoAPClient
 
@@ -268,7 +268,7 @@ class PhilipsGenericFan(PhilipsEntity, FanEntity):
         self._unique_id = None
 
     @property
-    def unique_id(self) -> Optional[str]:
+    def unique_id(self) -> str | None:
         """Return the unique ID of the fan."""
         return self._unique_id
 
@@ -326,7 +326,7 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
             self._unique_id = f"{self._model}-{device_id}"
         except Exception as e:
             _LOGGER.error("Failed retrieving unique_id: %s", e)
-            raise PlatformNotReady
+            raise PlatformNotReady from e
 
     def _collect_available_preset_modes(self):
         preset_modes = {}
@@ -360,8 +360,8 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
 
     async def async_turn_on(
         self,
-        percentage: Optional[int] = None,
-        preset_mode: Optional[str] = None,
+        percentage: int | None = None,
+        preset_mode: str | None = None,
         **kwargs,
     ):
         """Turn the fan on."""
@@ -396,12 +396,12 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
         return features
 
     @property
-    def preset_modes(self) -> Optional[list[str]]:
+    def preset_modes(self) -> list[str] | None:
         """Return the supported preset modes."""
         return self._preset_modes
 
     @property
-    def preset_mode(self) -> Optional[str]:
+    def preset_mode(self) -> str | None:
         """Return the selected preset mode."""
         for preset_mode, status_pattern in self._available_preset_modes.items():
             for k, v in status_pattern.items():
@@ -413,6 +413,7 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
                     break
             else:
                 return preset_mode
+        return None
 
     async def async_set_preset_mode(self, preset_mode: str) -> None:
         """Set the preset mode of the fan."""
@@ -439,7 +440,7 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
     async def async_oscillate(self, oscillating: bool) -> None:
         """Osciallate the fan."""
         if self.KEY_OSCILLATION is None:
-            return None
+            return
 
         key = next(iter(self.KEY_OSCILLATION))
         values = self.KEY_OSCILLATION.get(key)
@@ -451,7 +452,7 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
             await self.coordinator.client.set_control_value(key, off)
 
     @property
-    def percentage(self) -> Optional[int]:
+    def percentage(self) -> int | None:
         """Return the speed percentages."""
         for speed, status_pattern in self._available_speeds.items():
             for k, v in status_pattern.items():
@@ -476,14 +477,14 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
                 await self.coordinator.client.set_control_values(data=status_pattern)
 
     @property
-    def extra_state_attributes(self) -> Optional[dict[str, Any]]:
+    def extra_state_attributes(self) -> dict[str, Any] | None:
         """Return the extra state attributes."""
 
         def append(
             attributes: dict,
             key: str,
             philips_key: str,
-            value_map: Union[dict, Callable[[Any, Any], Any]] = None,
+            value_map: dict | Callable[[Any, Any], Any] | None = None,
         ):
             # some philips keys are not unique, so # serves as a marker and needs to be filtered out
             philips_clean_key = philips_key.partition("#")[0]
@@ -826,8 +827,8 @@ class PhilipsAC1214(PhilipsGenericCoAPFan):
 
     async def async_turn_on(
         self,
-        percentage: Optional[int] = None,
-        preset_mode: Optional[str] = None,
+        percentage: int | None = None,
+        preset_mode: str | None = None,
         **kwargs,
     ):
         """Turn on the device."""

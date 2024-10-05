@@ -1,6 +1,5 @@
 """The Philips AirPurifier component."""
 
-import asyncio
 import ipaddress
 import logging
 import re
