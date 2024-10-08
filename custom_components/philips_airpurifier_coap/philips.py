@@ -671,7 +671,7 @@ class PhilipsAC085011(PhilipsNewGenericCoAPFan):
     UNAVAILABLE_FILTERS = [PhilipsApi.FILTER_NANOPROTECT_PREFILTER]
 
 
-class PhilipsAC085011C(PhilipsAC085011):
+class PhilipsAC085011C(PhilipsNewGenericCoAPFan):
     """AC0850/11 with firmware AWS_Philips_AIR_Combo."""
 
     AVAILABLE_PRESET_MODES = {
@@ -688,6 +688,14 @@ class PhilipsAC085011C(PhilipsAC085011):
     }
     # the prefilter data is present but doesn't change for this device, so let's take it out
     UNAVAILABLE_FILTERS = [PhilipsApi.FILTER_NANOPROTECT_PREFILTER]
+
+
+class PhilipsAC085020(PhilipsAC085011):
+    """AC0850/20 with firmware AWS_Philips_AIR."""
+
+
+class PhilipsAC085020C(PhilipsAC085011C):
+    """AC0850/20 with firmware AWS_Philips_AIR_Combo."""
 
 
 class PhilipsAC085031(PhilipsAC085011C):
@@ -1822,6 +1830,8 @@ class PhilipsCX5120(PhilipsNew2GenericCoAPFan):
 model_to_class = {
     FanModel.AC0850_11: PhilipsAC085011,
     FanModel.AC0850_11C: PhilipsAC085011C,
+    FanModel.AC0850_20: PhilipsAC085020,
+    FanModel.AC0850_20C: PhilipsAC085020C,
     FanModel.AC0850_31: PhilipsAC085031,
     FanModel.AC1214: PhilipsAC1214,
     FanModel.AC1715: PhilipsAC1715,

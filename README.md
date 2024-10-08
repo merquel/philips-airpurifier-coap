@@ -61,6 +61,8 @@ Note: `configuration.yaml` is no longer supported and your configuration is not 
 
 - AC0850/11 AWS_Philips_AIR
 - AC0850/11 AWS_Philips_AIR_Combo
+- AC0850/20 AWS_Philips_AIR
+- AC0850/20 AWS_Philips_AIR_Combo
 - AC0850/31
 - AC1214
 - AC1715
