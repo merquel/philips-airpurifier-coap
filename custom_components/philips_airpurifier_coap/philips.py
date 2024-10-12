@@ -1247,6 +1247,10 @@ class PhilipsAC3259(PhilipsGenericCoAPFan):
     AVAILABLE_SELECTS = [PhilipsApi.GAS_PREFERRED_INDEX]
 
 
+class PhilipsAC3421(PhilipsAC0950):
+    """AC3421."""
+
+
 class PhilipsAC3737(PhilipsNew2GenericCoAPFan):
     """AC3737."""
 
@@ -1873,6 +1877,7 @@ model_to_class = {
     FanModel.AC3055: PhilipsAC3055,
     FanModel.AC3059: PhilipsAC3059,
     FanModel.AC3259: PhilipsAC3259,
+    FanModel.AC3421: PhilipsAC3421,
     FanModel.AC3737: PhilipsAC3737,
     FanModel.AC3829: PhilipsAC3829,
     FanModel.AC3836: PhilipsAC3836,
