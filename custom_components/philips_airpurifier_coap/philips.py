@@ -702,6 +702,31 @@ class PhilipsAC085031(PhilipsAC085011C):
     """AC0850/31."""
 
 
+class PhilipsAC0950(PhilipsNew2GenericCoAPFan):
+    """AC0950."""
+
+    AVAILABLE_PRESET_MODES = {
+        PresetMode.AUTO: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 0,
+        },
+        PresetMode.TURBO: {PhilipsApi.NEW2_POWER: 1, PhilipsApi.NEW2_MODE_B: 18},
+        PresetMode.MEDIUM: {PhilipsApi.NEW2_POWER: 1, PhilipsApi.NEW2_MODE_B: 19},
+        PresetMode.SLEEP: {PhilipsApi.NEW2_POWER: 1, PhilipsApi.NEW2_MODE_B: 17},
+    }
+    AVAILABLE_SPEEDS = {
+        PresetMode.SLEEP: {PhilipsApi.NEW2_POWER: 1, PhilipsApi.NEW2_MODE_B: 17},
+        PresetMode.MEDIUM: {PhilipsApi.NEW2_POWER: 1, PhilipsApi.NEW2_MODE_B: 19},
+        PresetMode.TURBO: {PhilipsApi.NEW2_POWER: 1, PhilipsApi.NEW2_MODE_B: 18},
+    }
+    # the prefilter data is present but doesn't change for this device, so let's take it out
+    UNAVAILABLE_FILTERS = [PhilipsApi.FILTER_NANOPROTECT_PREFILTER]
+
+    AVAILABLE_SWITCHES = [PhilipsApi.NEW2_CHILD_LOCK, PhilipsApi.NEW2_BEEP]
+    AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT]
+    AVAILABLE_SELECTS = [PhilipsApi.NEW2_TIMER2]
+
+
 # the AC1715 seems to be a new class of devices that follows some patterns of its own
 class PhilipsAC1715(PhilipsNewGenericCoAPFan):
     """AC1715."""
@@ -1833,6 +1858,7 @@ model_to_class = {
     FanModel.AC0850_20: PhilipsAC085020,
     FanModel.AC0850_20C: PhilipsAC085020C,
     FanModel.AC0850_31: PhilipsAC085031,
+    FanModel.AC0950: PhilipsAC0950,
     FanModel.AC1214: PhilipsAC1214,
     FanModel.AC1715: PhilipsAC1715,
     FanModel.AC2729: PhilipsAC2729,
