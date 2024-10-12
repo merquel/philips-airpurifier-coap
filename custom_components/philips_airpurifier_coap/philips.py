@@ -631,7 +631,7 @@ class PhilipsNew2GenericCoAPFan(PhilipsGenericCoAPFanBase):
 
     AVAILABLE_LIGHTS = []
     AVAILABLE_SWITCHES = []
-    AVAILABLE_SELECTS = []
+    AVAILABLE_SELECTS = [PhilipsApi.NEW2_GAS_PREFERRED_INDEX]
 
     KEY_PHILIPS_POWER = PhilipsApi.NEW2_POWER
     STATE_POWER_ON = 1
@@ -671,7 +671,7 @@ class PhilipsAC085011(PhilipsNewGenericCoAPFan):
     UNAVAILABLE_FILTERS = [PhilipsApi.FILTER_NANOPROTECT_PREFILTER]
 
 
-class PhilipsAC085011C(PhilipsNewGenericCoAPFan):
+class PhilipsAC085011C(PhilipsNew2GenericCoAPFan):
     """AC0850/11 with firmware AWS_Philips_AIR_Combo."""
 
     AVAILABLE_PRESET_MODES = {
