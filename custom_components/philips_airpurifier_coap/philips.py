@@ -727,6 +727,10 @@ class PhilipsAC0950(PhilipsNew2GenericCoAPFan):
     AVAILABLE_SELECTS = [PhilipsApi.NEW2_GAS_PREFERRED_INDEX, PhilipsApi.NEW2_TIMER2]
 
 
+class PhilipsAC0951(PhilipsAC0950):
+    """AC0951."""
+
+
 # the AC1715 seems to be a new class of devices that follows some patterns of its own
 class PhilipsAC1715(PhilipsNewGenericCoAPFan):
     """AC1715."""
@@ -1863,6 +1867,7 @@ model_to_class = {
     FanModel.AC0850_20C: PhilipsAC085020C,
     FanModel.AC0850_31: PhilipsAC085031,
     FanModel.AC0950: PhilipsAC0950,
+    FanModel.AC0951: PhilipsAC0951,
     FanModel.AC1214: PhilipsAC1214,
     FanModel.AC1715: PhilipsAC1715,
     FanModel.AC2729: PhilipsAC2729,
