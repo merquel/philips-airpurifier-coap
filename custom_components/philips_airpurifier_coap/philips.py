@@ -46,7 +46,7 @@ class Coordinator:
     def __init__(self, client: CoAPClient, host: str, mac: str) -> None:  # noqa: D107
         self.client = client
         self._host = host
-        self._mac = mac
+        self.mac = mac
 
         # It's None before the first successful update.
         # Components should call async_first_refresh to make sure the first
@@ -68,7 +68,7 @@ class Coordinator:
             callback=self.reconnect,
             autostart=True,
         )
-        self._timer_disconnected._auto_restart = True
+        self._timer_disconnected.setAutoRestart(True)
         _LOGGER.debug("init: finished for host %s", self._host)
 
     async def shutdown(self):
@@ -209,7 +209,7 @@ class PhilipsEntity(Entity):
         )[0]
         self._firmware = coordinator.status["WifiVersion"]
         self._manufacturer = "Philips"
-        self._mac = coordinator._mac
+        self._mac = coordinator.mac
 
     @property
     def should_poll(self) -> bool:
