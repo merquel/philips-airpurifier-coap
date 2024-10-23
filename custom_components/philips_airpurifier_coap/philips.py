@@ -631,7 +631,7 @@ class PhilipsNew2GenericCoAPFan(PhilipsGenericCoAPFanBase):
 
     AVAILABLE_LIGHTS = []
     AVAILABLE_SWITCHES = []
-    AVAILABLE_SELECTS = [PhilipsApi.NEW2_GAS_PREFERRED_INDEX]
+    AVAILABLE_SELECTS = []
 
     KEY_PHILIPS_POWER = PhilipsApi.NEW2_POWER
     STATE_POWER_ON = 1
@@ -724,7 +724,7 @@ class PhilipsAC0950(PhilipsNew2GenericCoAPFan):
 
     AVAILABLE_SWITCHES = [PhilipsApi.NEW2_CHILD_LOCK, PhilipsApi.NEW2_BEEP]
     AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT]
-    AVAILABLE_SELECTS = [PhilipsApi.NEW2_TIMER2]
+    AVAILABLE_SELECTS = [PhilipsApi.NEW2_GAS_PREFERRED_INDEX, PhilipsApi.NEW2_TIMER2]
 
 
 # the AC1715 seems to be a new class of devices that follows some patterns of its own
