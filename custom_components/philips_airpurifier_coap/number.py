@@ -1,4 +1,5 @@
 """Philips Air Purifier & Humidifier Numbers."""
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -105,8 +106,7 @@ class PhilipsNumber(PhilipsEntity, NumberEntity):
     @property
     def native_value(self) -> float | None:
         """Return the current number."""
-        value = self._device_status.get(self.kind)
-        return value
+        return self._device_status.get(self.kind)
 
     async def async_set_native_value(self, value: float) -> None:
         """Select a number."""
@@ -118,10 +118,8 @@ class PhilipsNumber(PhilipsEntity, NumberEntity):
             value = self._attr_native_min_value
         if value % self._attr_native_step > 0:
             value = value // self._attr_native_step * self._attr_native_step
-        if value > 0 and value < self._min:
-            value = self._min
-        if value > self._attr_native_max_value:
-            value = self._attr_native_max_value
+        value = max(value, self._min) if value > 0 else value
+        value = min(value, self._attr_native_max_value)
 
         _LOGGER.debug("setting number with: %s", value)
 
