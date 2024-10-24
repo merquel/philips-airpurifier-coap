@@ -1,4 +1,5 @@
 """Philips Air Purifier & Humidifier Switches."""
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -118,8 +119,7 @@ class PhilipsLight(PhilipsEntity, LightEntity):
         # _LOGGER.debug("is_on, kind: %s - status: %s - on: %s", self.kind, status, self._on)
         if self._dimmable:
             return status > 0
-        else:
-            return status == int(self._on)
+        return status == int(self._on)
 
     @property
     def brightness(self) -> int | None:
@@ -127,8 +127,7 @@ class PhilipsLight(PhilipsEntity, LightEntity):
         if self._dimmable:
             brightness = int(self._device_status.get(self.kind))
             return round(255 * brightness / 100)
-        else:
-            return None
+        return None
 
     async def async_turn_on(self, **kwargs) -> None:
         """Turn the light on."""
