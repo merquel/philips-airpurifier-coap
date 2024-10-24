@@ -58,11 +58,11 @@ async def async_setup_entry(
             cls_available_switches = getattr(cls, "AVAILABLE_SWITCHES", [])
             available_switches.extend(cls_available_switches)
 
-        switches = []
-
-        for switch in SWITCH_TYPES:
-            if switch in available_switches:
-                switches.append(PhilipsSwitch(coordinator, name, model, switch))
+        switches = [
+            PhilipsSwitch(coordinator, name, model, switch)
+            for switch in SWITCH_TYPES
+            if switch in available_switches
+        ]
 
         async_add_entities(switches, update_before_add=False)
 
