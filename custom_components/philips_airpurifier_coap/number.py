@@ -56,11 +56,11 @@ async def async_setup_entry(
             cls_available_numbers = getattr(cls, "AVAILABLE_NUMBERS", [])
             available_numbers.extend(cls_available_numbers)
 
-        numbers = []
-
-        for number in NUMBER_TYPES:
-            if number in available_numbers:
-                numbers.append(PhilipsNumber(coordinator, name, model, number))
+        numbers = [
+            PhilipsNumber(coordinator, name, model, number)
+            for number in NUMBER_TYPES
+            if number in available_numbers
+        ]
 
         async_add_entities(numbers, update_before_add=False)
 
