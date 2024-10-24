@@ -120,7 +120,7 @@ class PhilipsLight(PhilipsEntity, LightEntity):
         """Return if the light is on."""
         status = int(self._device_status.get(self.kind))
         # _LOGGER.debug("is_on, kind: %s - status: %s - on: %s", self.kind, status, self._on)
-        return status != int(self._off)
+        return int(status) != int(self._off)
 
     @property
     def brightness(self) -> int | None:
@@ -143,7 +143,7 @@ class PhilipsLight(PhilipsEntity, LightEntity):
             else:
                 value = int(self._on)
         else:
-            value = int(self._on)
+            value = self._on
 
         _LOGGER.debug("async_turn_on, kind: %s - value: %s", self.kind, value)
         await self.coordinator.client.set_control_value(self.kind, value)
