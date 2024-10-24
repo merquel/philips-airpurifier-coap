@@ -91,6 +91,7 @@ CONF_DEVICE_ID = "device_id"
 
 SWITCH_ON = "on"
 SWITCH_OFF = "off"
+SWITCH_MEDIUM = "medium"
 OPTIONS = "options"
 DIMMABLE = "dimmable"
 
@@ -370,6 +371,7 @@ class PhilipsApi:
     NEW2_POWER = "D03102"
     NEW2_DISPLAY_BACKLIGHT = "D0312D"
     NEW2_DISPLAY_BACKLIGHT2 = "D03105"
+    NEW2_DISPLAY_BACKLIGHT3 = "D03105#1"  # dimmable in 3 steps
     NEW2_TEMPERATURE = "D03224"
     NEW2_SOFTWARE_VERSION = "D01S12"
     NEW2_CHILD_LOCK = "D03103"
@@ -800,6 +802,15 @@ LIGHT_TYPES: dict[str, LightDescription] = {
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         SWITCH_ON: 100,
         SWITCH_OFF: 0,
+        DIMMABLE: True,
+    },
+    PhilipsApi.NEW2_DISPLAY_BACKLIGHT3: {
+        ATTR_ICON: ICON.LIGHT_DIMMING_BUTTON,
+        FanAttributes.LABEL: FanAttributes.DISPLAY_BACKLIGHT,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        SWITCH_ON: 123,
+        SWITCH_OFF: 0,
+        SWITCH_MEDIUM: 115,
         DIMMABLE: True,
     },
 }
