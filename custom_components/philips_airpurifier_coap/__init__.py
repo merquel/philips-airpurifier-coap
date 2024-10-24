@@ -7,7 +7,8 @@ from functools import partial
 from ipaddress import IPv6Address, ip_address
 import json
 import logging
-from os import path, walk
+from os import walk
+from pathlib import Path
 
 from aioairctrl import CoAPClient
 from getmac import get_mac_address
@@ -61,7 +62,7 @@ class ListingView(HomeAssistantView):
         for dirpath, _dirnames, filenames in walk(self.iconpath):
             icons.extend(
                 [
-                    {"name": path.join(dirpath[len(self.iconpath) :], fn[:-4])}
+                    {"name": (Path(dirpath[len(self.iconpath) :]) / fn[:-4]).as_posix()}
                     for fn in filenames
                     if fn.endswith(".svg")
                 ]
