@@ -1,4 +1,5 @@
 """Philips Air Purifier & Humidifier Selects."""
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -55,11 +56,11 @@ async def async_setup_entry(
             cls_available_selects = getattr(cls, "AVAILABLE_SELECTS", [])
             available_selects.extend(cls_available_selects)
 
-        selects = []
-
-        for select in SELECT_TYPES:
-            if select in available_selects:
-                selects.append(PhilipsSelect(coordinator, name, model, select))
+        selects = [
+            PhilipsSelect(coordinator, name, model, select)
+            for select in SELECT_TYPES
+            if select in available_selects
+        ]
 
         async_add_entities(selects, update_before_add=False)
 
