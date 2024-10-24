@@ -55,13 +55,11 @@ async def async_setup_entry(  # noqa: D103
             cls_available_binary_sensors = getattr(cls, "AVAILABLE_BINARY_SENSORS", [])
             available_binary_sensors.extend(cls_available_binary_sensors)
 
-    binary_sensors = []
-
-    for binary_sensor in BINARY_SENSOR_TYPES:
-        if binary_sensor in status and binary_sensor in available_binary_sensors:
-            binary_sensors.append(
-                PhilipsBinarySensor(coordinator, name, model, binary_sensor)
-            )
+    binary_sensors = [
+        PhilipsBinarySensor(coordinator, name, model, binary_sensor)
+        for binary_sensor in BINARY_SENSOR_TYPES
+        if binary_sensor in status and binary_sensor in available_binary_sensors
+    ]
 
     async_add_entities(binary_sensors, update_before_add=False)
 
