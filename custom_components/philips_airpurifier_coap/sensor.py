@@ -1,4 +1,5 @@
 """Philips Air Purifier & Humidifier Sensors."""
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -117,9 +118,10 @@ class PhilipsSensor(PhilipsEntity, SensorEntity):
         try:
             device_id = self._device_status[PhilipsApi.DEVICE_ID]
             self._attr_unique_id = f"{self._model}-{device_id}-{kind.lower()}"
-        except Exception as e:
-            _LOGGER.error("Failed retrieving unique_id: %s", e)
-            raise PlatformNotReady
+        except KeyError as e:
+            _LOGGER.error("Failed retrieving unique_id due to missing key: %s", e)
+            raise PlatformNotReady from e
+
         self._attrs: dict[str, Any] = {}
         self.kind = kind
 
@@ -180,9 +182,13 @@ class PhilipsFilterSensor(PhilipsEntity, SensorEntity):
             self._attr_unique_id = (
                 f"{self._model}-{device_id}-{self._description[FanAttributes.LABEL]}"
             )
-        except Exception as e:
-            _LOGGER.error("Failed retrieving unique_id: %s", e)
-            raise PlatformNotReady
+        except KeyError as e:
+            _LOGGER.error("Failed retrieving unique_id due to missing key: %s", e)
+            raise PlatformNotReady from e
+        except TypeError as e:
+            _LOGGER.error("Failed retrieving unique_id due to type error: %s", e)
+            raise PlatformNotReady from e
+
         self._attrs: dict[str, Any] = {}
 
     @property
@@ -190,8 +196,7 @@ class PhilipsFilterSensor(PhilipsEntity, SensorEntity):
         """Return the native value of the filter sensor."""
         if self._has_total:
             return self._percentage
-        else:
-            return self._time_remaining
+        return self._time_remaining
 
     @property
     def extra_state_attributes(self) -> dict[str, Any]:

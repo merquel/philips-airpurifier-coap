@@ -1,4 +1,5 @@
 """Philips Air Purifier & Humidifier Binary Sensors."""
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -89,9 +90,10 @@ class PhilipsBinarySensor(PhilipsEntity, BinarySensorEntity):
         try:
             device_id = self._device_status[PhilipsApi.DEVICE_ID]
             self._attr_unique_id = f"{self._model}-{device_id}-{kind.lower()}"
-        except Exception as e:
+        except KeyError as e:
             _LOGGER.error("Failed retrieving unique_id: %s", e)
-            raise PlatformNotReady
+            raise PlatformNotReady from e
+
         self._attrs: dict[str, Any] = {}
         self.kind = kind
 
