@@ -59,11 +59,11 @@ async def async_setup_entry(
             cls_available_lights = getattr(cls, "AVAILABLE_LIGHTS", [])
             available_lights.extend(cls_available_lights)
 
-        lights = []
-
-        for light in LIGHT_TYPES:
-            if light in available_lights:
-                lights.append(PhilipsLight(coordinator, name, model, light))
+        lights = [
+            PhilipsLight(coordinator, name, model, light)
+            for light in LIGHT_TYPES
+            if light in available_lights
+        ]
 
         async_add_entities(lights, update_before_add=False)
 
