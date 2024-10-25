@@ -1,4 +1,5 @@
 """Constants for Philips AirPurifier integration."""
+
 from __future__ import annotations
 
 from enum import StrEnum
@@ -90,6 +91,7 @@ CONF_DEVICE_ID = "device_id"
 
 SWITCH_ON = "on"
 SWITCH_OFF = "off"
+SWITCH_MEDIUM = "medium"
 OPTIONS = "options"
 DIMMABLE = "dimmable"
 
@@ -97,7 +99,13 @@ DIMMABLE = "dimmable"
 class FanModel(StrEnum):
     """Supported fan models."""
 
-    AC0850 = "AC0850"
+    AC0850_11 = "AC0850/11 AWS_Philips_AIR"
+    AC0850_11C = "AC0850/11 AWS_Philips_AIR_Combo"
+    AC0850_20 = "AC0850/20 AWS_Philips_AIR"
+    AC0850_20C = "AC0850/20 AWS_Philips_AIR_Combo"
+    AC0850_31 = "AC0850/31"
+    AC0950 = "AC0950"
+    AC0951 = "AC0951"
     AC1214 = "AC1214"
     AC1715 = "AC1715"
     AC2729 = "AC2729"
@@ -112,6 +120,7 @@ class FanModel(StrEnum):
     AC3055 = "AC3055"
     AC3059 = "AC3059"
     AC3259 = "AC3259"
+    AC3421 = "AC3421"
     AC3737 = "AC3737"
     AC3829 = "AC3829"
     AC3836 = "AC3836"
@@ -153,6 +162,7 @@ class PresetMode:
     SLEEP = "sleep"
     SLEEP_ALLERGY = "allergy sleep"
     TURBO = "turbo"
+    MEDIUM = "medium"
     GAS = "gas"
     POLLUTION = "pollution"
     LOW = "low"
@@ -361,6 +371,7 @@ class PhilipsApi:
     NEW2_POWER = "D03102"
     NEW2_DISPLAY_BACKLIGHT = "D0312D"
     NEW2_DISPLAY_BACKLIGHT2 = "D03105"
+    NEW2_DISPLAY_BACKLIGHT3 = "D03105#1"  # dimmable in 3 steps
     NEW2_TEMPERATURE = "D03224"
     NEW2_SOFTWARE_VERSION = "D01S12"
     NEW2_CHILD_LOCK = "D03103"
@@ -390,7 +401,6 @@ class PhilipsApi:
     NEW2_AUTO_PLUS_AI = "D03180"
     NEW2_PREFERRED_INDEX = "D0312A#1"
     NEW2_GAS_PREFERRED_INDEX = "D0312A#2"
-    NEW2_ERROR_CODE = "D03240 "
 
     PREFERRED_INDEX_MAP = {
         0: ("Indoor Allergen Index", ICON.IAI),
@@ -601,7 +611,6 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
 }
 
 
-
 EXTRA_SENSOR_TYPES: dict[str, SensorDescription] = {}
 
 BINARY_SENSOR_TYPES: dict[str, SensorDescription] = {
@@ -793,6 +802,15 @@ LIGHT_TYPES: dict[str, LightDescription] = {
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         SWITCH_ON: 100,
         SWITCH_OFF: 0,
+        DIMMABLE: True,
+    },
+    PhilipsApi.NEW2_DISPLAY_BACKLIGHT3: {
+        ATTR_ICON: ICON.LIGHT_DIMMING_BUTTON,
+        FanAttributes.LABEL: FanAttributes.DISPLAY_BACKLIGHT,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        SWITCH_ON: 123,
+        SWITCH_OFF: 0,
+        SWITCH_MEDIUM: 115,
         DIMMABLE: True,
     },
 }
