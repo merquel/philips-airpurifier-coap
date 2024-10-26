@@ -135,8 +135,8 @@ class FanModel(StrEnum):
     AC5659 = "AC5659"
     AMF765 = "AMF765"
     AMF870 = "AMF870"
+    CX3550 = "CX3550"
     CX5120 = "CX5120"
-    CX3550 = "CX3550/01"
 
 
 class PresetMode:
