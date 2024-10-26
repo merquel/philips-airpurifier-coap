@@ -459,7 +459,9 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
             return status == on
 
         if isinstance(on, list):
-            return status in on        return status is not None and status in [on, test]
+            return status in on
+
+        return None
 
     async def async_oscillate(self, oscillating: bool) -> None:
         """Osciallate the fan."""
