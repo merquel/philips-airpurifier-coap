@@ -96,7 +96,7 @@ Note: `configuration.yaml` is no longer supported and your configuration is not 
 - AMF765
 - AMF870
 - CX5120
-- CX3550/01
+- CX3550
 
 
 ## Is your model not supported yet?
