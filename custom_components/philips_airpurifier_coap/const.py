@@ -410,13 +410,13 @@ class PhilipsApi:
     NEW2_GAS_PREFERRED_INDEX = "D0312A#2"
 
     PREFERRED_INDEX_MAP = {
-        0: ("Indoor Allergen Index", ICON.IAI),
-        1: ("PM2.5", ICON.PM25),
+        "0": ("Indoor Allergen Index", ICON.IAI),
+        "1": ("PM2.5", ICON.PM25),
     }
     GAS_PREFERRED_INDEX_MAP = {
-        0: ("Indoor Allergen Index", ICON.IAI),
-        1: ("PM2.5", ICON.PM25),
-        2: ("Gas", ICON.GAS),
+        "0": ("Indoor Allergen Index", ICON.IAI),
+        "1": ("PM2.5", ICON.PM25),
+        "2": ("Gas", ICON.GAS),
     }
     NEW_PREFERRED_INDEX_MAP = {
         "IAI": ("Indoor Allergen Index", ICON.IAI),
