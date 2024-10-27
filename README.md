@@ -92,6 +92,7 @@ Note: `configuration.yaml` is no longer supported and your configuration is not 
 - AC4236
 - AC4550
 - AC4558
+- AC5660
 - AC5659
 - AMF765
 - AMF870
