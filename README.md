@@ -41,7 +41,7 @@ Philips has recently introduced a proper API to remote control the devices. Howe
 
 ## Configuration
 
-* The integration attempts to autodiscover your purifiers. Autodiscovery is based on the MAC address and original hostname of the devices. Home Assistant will notify you, if that is successful. 
+* The integration attempts to autodiscover your purifiers. Autodiscovery is based on the MAC address and original hostname of the devices. Home Assistant will notify you, if that is successful.
 * Alternatively, go to Configuration -> Devices & Services
 * Click `Add Integration`
 * Search for `Philips AirPurifier` and select it
@@ -96,6 +96,7 @@ Note: `configuration.yaml` is no longer supported and your configuration is not 
 - AMF765
 - AMF870
 - CX5120
+- CX3550
 
 
 ## Is your model not supported yet?
