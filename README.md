@@ -209,6 +209,7 @@ The integration also provides the original Philips icons for your use in the fro
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/purification_only_mode.svg)  | purification_only_mode  |
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/two_in_one_mode.svg)         | two_in_one_mode         |
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/bacteria_virus_mode.svg)     | bacteria_virus_mode     |
+| ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/pollution_mode.svg)          | pollution_mode          |
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/nanoprotect_filter.svg)      | nanoprotect_filter      |
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/filter_replacement.svg)      | filter_replacement      |
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/water_refill.svg)            | water_refill            |
