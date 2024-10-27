@@ -59,6 +59,7 @@ class ICON(StrEnum):
     PURIFICATION_ONLY_MODE = "pap:purification_only_mode"
     TWO_IN_ONE_MODE = "pap:two_in_one_mode"
     BACTERIA_VIRUS_MODE = "pap:bacteria_virus_mode"
+    POLLUTION_MODE = "pap:pollution_mode"
     NANOPROTECT_FILTER = "pap:nanoprotect_filter"
     FILTER_REPLACEMENT = "pap:filter_replacement"
     WATER_REFILL = "pap:water_refill"
@@ -134,6 +135,7 @@ class FanModel(StrEnum):
     AC4550 = "AC4550"
     AC4558 = "AC4558"
     AC5659 = "AC5659"
+    AC5660 = "AC5660"
     AMF765 = "AMF765"
     AMF870 = "AMF870"
     CX3550 = "CX3550"
@@ -177,19 +179,19 @@ class PresetMode:
         AUTO: ICON.AUTO_MODE,
         AUTO_GENERAL: ICON.AUTO_MODE,
         BACTERIA: ICON.BACTERIA_VIRUS_MODE,
+        POLLUTION: ICON.POLLUTION_MODE,
         SPEED_GENTLE_1: ICON.SPEED_1,
         SPEED_1: ICON.SPEED_1,
         SPEED_2: ICON.SPEED_2,
         SPEED_3: ICON.SPEED_3,
+        TURBO: ICON.SPEED_3,
         # we use the sleep mode icon for all related modes
         GENTLE: ICON.SLEEP_MODE,
         NIGHT: ICON.SLEEP_MODE,
         SLEEP: ICON.SLEEP_MODE,
-        TURBO: ICON.SPEED_3,
         # unfortunately, the allergy sleep mode has the same icon as the auto mode on the device
         SLEEP_ALLERGY: ICON.AUTO_MODE,
-        # some devices have a gas and a pollution mode, but there doesn't seem to be a Philips icon for that
-        POLLUTION: ICON.AUTO_MODE,
+        # some devices have a gas mode, but there doesn't seem to be a Philips icon for that
         GAS: ICON.AUTO_MODE,
     }
 

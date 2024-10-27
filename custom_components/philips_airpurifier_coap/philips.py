@@ -1674,7 +1674,7 @@ class PhilipsAC5659(PhilipsGenericCoAPFan):
     """AC5659."""
 
     AVAILABLE_PRESET_MODES = {
-        PresetMode.AUTO: {PhilipsApi.POWER: "1", PhilipsApi.MODE: "P"},
+        PresetMode.POLLUTION: {PhilipsApi.POWER: "1", PhilipsApi.MODE: "P"},
         PresetMode.ALLERGEN: {PhilipsApi.POWER: "1", PhilipsApi.MODE: "A"},
         PresetMode.BACTERIA: {PhilipsApi.POWER: "1", PhilipsApi.MODE: "B"},
         # make speeds available as preset
@@ -1732,6 +1732,10 @@ class PhilipsAC5659(PhilipsGenericCoAPFan):
         },
     }
     AVAILABLE_SELECTS = [PhilipsApi.PREFERRED_INDEX]
+
+
+class PhilipsAC5660(PhilipsAC5659):
+    """AC5660."""
 
 
 class PhilipsAMFxxx(PhilipsNew2GenericCoAPFan):
@@ -1994,6 +1998,7 @@ model_to_class = {
     FanModel.AC4550: PhilipsAC4550,
     FanModel.AC4558: PhilipsAC4558,
     FanModel.AC5659: PhilipsAC5659,
+    FanModel.AC5660: PhilipsAC5660,
     FanModel.AMF765: PhilipsAMF765,
     FanModel.AMF870: PhilipsAMF870,
     FanModel.CX5120: PhilipsCX5120,
