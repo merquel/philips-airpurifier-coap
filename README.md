@@ -88,6 +88,7 @@ Note: `configuration.yaml` is no longer supported and your configuration is not 
 - AC3854/51
 - AC3858/50
 - AC3858/51
+- AC3858/83
 - AC3858/86
 - AC4236
 - AC4550
