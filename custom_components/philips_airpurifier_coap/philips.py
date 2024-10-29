@@ -1620,11 +1620,12 @@ class PhilipsAC4221(PhilipsNew2GenericCoAPFan):
         },
     }
 
-    AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT]
+    AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT3]
     AVAILABLE_SWITCHES = [
         PhilipsApi.NEW2_CHILD_LOCK,
         PhilipsApi.NEW2_BEEP,
         PhilipsApi.NEW2_AUTO_PLUS_AI,
+        PhilipsApi.NEW2_DISPLAY_BACKLIGHT3,
     ]
     AVAILABLE_SELECTS = [PhilipsApi.NEW2_TIMER2]
 

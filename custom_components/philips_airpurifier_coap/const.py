@@ -93,6 +93,7 @@ SWITCH_ON = "on"
 TEST_ON = "on"
 SWITCH_OFF = "off"
 SWITCH_MEDIUM = "medium"
+SWITCH_AUTO = "auto"
 OPTIONS = "options"
 DIMMABLE = "dimmable"
 
@@ -745,6 +746,13 @@ SWITCH_TYPES: dict[str, SwitchDescription] = {
         SWITCH_ON: 1,
         SWITCH_OFF: 0,
     },
+    PhilipsApi.NEW2_DISPLAY_BACKLIGHT3: {
+        ATTR_ICON: ICON.LIGHT_DIMMING_BUTTON,
+        FanAttributes.LABEL: FanAttributes.DISPLAY_BACKLIGHT,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        SWITCH_ON: 101,
+        SWITCH_OFF: 0,
+    },
     PhilipsApi.NEW2_BEEP: {
         ATTR_ICON: "mdi:volume-high",
         FanAttributes.LABEL: FanAttributes.BEEP,
@@ -812,6 +820,7 @@ LIGHT_TYPES: dict[str, LightDescription] = {
         SWITCH_ON: 123,
         SWITCH_OFF: 0,
         SWITCH_MEDIUM: 115,
+        SWITCH_AUTO: 101,
         DIMMABLE: True,
     },
 }

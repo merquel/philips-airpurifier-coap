@@ -25,6 +25,7 @@ from .const import (
     DIMMABLE,
     DOMAIN,
     LIGHT_TYPES,
+    SWITCH_AUTO,
     SWITCH_MEDIUM,
     SWITCH_OFF,
     SWITCH_ON,
@@ -87,6 +88,7 @@ class PhilipsLight(PhilipsEntity, LightEntity):
         self._on = self._description.get(SWITCH_ON)
         self._off = self._description.get(SWITCH_OFF)
         self._medium = self._description.get(SWITCH_MEDIUM)
+        self._auto = self._description.get(SWITCH_AUTO)
         self._dimmable = self._description.get(DIMMABLE)
         self._attr_device_class = self._description.get(ATTR_DEVICE_CLASS)
         self._attr_icon = self._description.get(ATTR_ICON)
@@ -98,6 +100,7 @@ class PhilipsLight(PhilipsEntity, LightEntity):
         if self._dimmable is None:
             self._dimmable = False
             self._medium = None
+            self._auto = None
 
         if self._dimmable:
             self._attr_color_mode = ColorMode.BRIGHTNESS
@@ -132,6 +135,8 @@ class PhilipsLight(PhilipsEntity, LightEntity):
         if self._dimmable:
             brightness = int(self._device_status.get(self.kind))
             if self._medium and brightness == int(self._medium):
+                if self._auto and brightness == int(self._auto):
+                    return 0
                 return 128
             return round(255 * brightness / int(self._on))
         return None
