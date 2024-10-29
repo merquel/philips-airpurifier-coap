@@ -226,6 +226,7 @@ class FanAttributes(StrEnum):
     DEVICE_ID = "device_id"
     DEVICE_VERSION = "device_version"
     DISPLAY_BACKLIGHT = "display_backlight"
+    AUTO_DISPLAY_BACKLIGHT = "auto_display_backlight"
     ERROR_CODE = "error_code"
     ERROR = "error"
     RAW = "raw"
@@ -244,6 +245,7 @@ class FanAttributes(StrEnum):
     HUMIDITY_TARGET = "humidity_target"
     INDOOR_ALLERGEN_INDEX = "indoor_allergen_index"
     LABEL = "label"
+    LAMP_MODE = "lamp_mode"
     LEVEL = "level"
     UNIT = "unit"
     VALUE = "value"
@@ -382,6 +384,7 @@ class PhilipsApi:
     NEW2_DISPLAY_BACKLIGHT = "D0312D"
     NEW2_DISPLAY_BACKLIGHT2 = "D03105"
     NEW2_DISPLAY_BACKLIGHT3 = "D03105#1"  # dimmable in 3 steps
+    NEW2_LAMP_MODE = "D03135"
     NEW2_TEMPERATURE = "D03224"
     NEW2_SOFTWARE_VERSION = "D01S12"
     NEW2_CHILD_LOCK = "D03103"
@@ -412,6 +415,11 @@ class PhilipsApi:
     NEW2_PREFERRED_INDEX = "D0312A#1"
     NEW2_GAS_PREFERRED_INDEX = "D0312A#2"
 
+    LAMP_MODE_MAP = {
+        0: ("Off", ICON.LIGHT_DIMMING_BUTTON),
+        1: ("Air Quality", ICON.LIGHT_DIMMING_BUTTON),
+        2: ("Ambient", ICON.LIGHT_DIMMING_BUTTON),
+    }
     PREFERRED_INDEX_MAP = {
         "0": ("Indoor Allergen Index", ICON.IAI),
         "1": ("PM2.5", ICON.PM25),
@@ -748,7 +756,7 @@ SWITCH_TYPES: dict[str, SwitchDescription] = {
     },
     PhilipsApi.NEW2_DISPLAY_BACKLIGHT3: {
         ATTR_ICON: ICON.LIGHT_DIMMING_BUTTON,
-        FanAttributes.LABEL: FanAttributes.DISPLAY_BACKLIGHT,
+        FanAttributes.LABEL: FanAttributes.AUTO_DISPLAY_BACKLIGHT,
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         SWITCH_ON: 101,
         SWITCH_OFF: 0,
@@ -840,6 +848,11 @@ SELECT_TYPES: dict[str, SelectDescription] = {
         FanAttributes.LABEL: FanAttributes.HUMIDITY_TARGET,
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         OPTIONS: PhilipsApi.HUMIDITY_TARGET_MAP,
+    },
+    PhilipsApi.NEW2_LAMP_MODE: {
+        FanAttributes.LABEL: FanAttributes.LAMP_MODE,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        OPTIONS: PhilipsApi.LAMP_MODE_MAP,
     },
     PhilipsApi.PREFERRED_INDEX: {
         FanAttributes.LABEL: FanAttributes.PREFERRED_INDEX,

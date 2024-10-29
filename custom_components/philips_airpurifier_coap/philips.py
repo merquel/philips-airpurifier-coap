@@ -1627,7 +1627,7 @@ class PhilipsAC4221(PhilipsNew2GenericCoAPFan):
         PhilipsApi.NEW2_AUTO_PLUS_AI,
         PhilipsApi.NEW2_DISPLAY_BACKLIGHT3,
     ]
-    AVAILABLE_SELECTS = [PhilipsApi.NEW2_TIMER2]
+    AVAILABLE_SELECTS = [PhilipsApi.NEW2_TIMER2, PhilipsApi.NEW2_LAMP_MODE]
 
 
 class PhilipsAC4236(PhilipsGenericCoAPFan):
