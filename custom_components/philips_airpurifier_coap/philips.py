@@ -1626,7 +1626,7 @@ class PhilipsAC4221(PhilipsNew2GenericCoAPFan):
         PhilipsApi.NEW2_BEEP,
         PhilipsApi.NEW2_AUTO_PLUS_AI,
     ]
-    AVAILABLE_SELECTS = [PhilipsApi.NEW2_TIMER]
+    AVAILABLE_SELECTS = [PhilipsApi.NEW2_TIMER2]
 
 
 class PhilipsAC4236(PhilipsGenericCoAPFan):
