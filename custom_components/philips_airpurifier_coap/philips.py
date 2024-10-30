@@ -1290,7 +1290,6 @@ class PhilipsAC3259(PhilipsGenericCoAPFan):
 class PhilipsAC3421(PhilipsAC0950):
     """AC3421."""
 
-    AVAILABLE_SWITCHES = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT3]
     AVAILABLE_SELECTS = [PhilipsApi.NEW2_LAMP_MODE]
 
 
@@ -1628,7 +1627,6 @@ class PhilipsAC4221(PhilipsNew2GenericCoAPFan):
         PhilipsApi.NEW2_CHILD_LOCK,
         PhilipsApi.NEW2_BEEP,
         PhilipsApi.NEW2_AUTO_PLUS_AI,
-        PhilipsApi.NEW2_DISPLAY_BACKLIGHT3,
     ]
     AVAILABLE_SELECTS = [PhilipsApi.NEW2_TIMER2, PhilipsApi.NEW2_LAMP_MODE]
 
