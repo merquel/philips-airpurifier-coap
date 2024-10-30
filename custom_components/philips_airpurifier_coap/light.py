@@ -6,7 +6,14 @@ from collections.abc import Callable
 import logging
 from typing import Any
 
-from homeassistant.components.light import ATTR_BRIGHTNESS, ColorMode, LightEntity
+from homeassistant.components.light import (
+    ATTR_BRIGHTNESS,
+    ATTR_EFFECT,
+    EFFECT_OFF,
+    ColorMode,
+    LightEntity,
+    LightEntityFeature,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     ATTR_DEVICE_CLASS,
@@ -102,9 +109,15 @@ class PhilipsLight(PhilipsEntity, LightEntity):
             self._medium = None
             self._auto = None
 
+        self._attr_effect_list = None
+        self._attr_effect = None
+
         if self._dimmable:
             self._attr_color_mode = ColorMode.BRIGHTNESS
             self._attr_supported_color_modes = {ColorMode.BRIGHTNESS}
+            if self._auto:
+                self._attr_effect_list = [SWITCH_AUTO]
+                self._attr_effect = EFFECT_OFF
         else:
             self._attr_color_mode = ColorMode.ONOFF
             self._attr_supported_color_modes = {ColorMode.ONOFF}
@@ -123,10 +136,20 @@ class PhilipsLight(PhilipsEntity, LightEntity):
         self.kind = light.partition("#")[0]
 
     @property
+    def supported_features(self) -> int:
+        """Return the supported features."""
+
+        features = None
+
+        if self._auto:
+            features = LightEntityFeature.EFFECT
+
+        return features
+
+    @property
     def is_on(self) -> bool:
         """Return if the light is on."""
         status = int(self._device_status.get(self.kind))
-        # _LOGGER.debug("is_on, kind: %s - status: %s - on: %s", self.kind, status, self._on)
         return int(status) != int(self._off)
 
     @property
@@ -143,7 +166,15 @@ class PhilipsLight(PhilipsEntity, LightEntity):
 
     async def async_turn_on(self, **kwargs) -> None:
         """Turn the light on."""
-        if self._dimmable:
+
+        # first we test if the auto effect is set for this light
+        if ATTR_EFFECT in kwargs:
+            self._attr_effect = kwargs[ATTR_EFFECT]
+            if self._attr_effect == SWITCH_AUTO:
+                value = self._auto
+
+        # no auto effect, so we test if the brightness is set
+        elif self._dimmable:
             if ATTR_BRIGHTNESS in kwargs:
                 if self._medium and kwargs[ATTR_BRIGHTNESS] < 255:
                     value = self._medium
@@ -151,6 +182,8 @@ class PhilipsLight(PhilipsEntity, LightEntity):
                     value = round(int(self._on) * int(kwargs[ATTR_BRIGHTNESS]) / 255)
             else:
                 value = int(self._on)
+
+        # no brightness set, so we just turn the light on
         else:
             value = self._on
 
@@ -159,5 +192,5 @@ class PhilipsLight(PhilipsEntity, LightEntity):
 
     async def async_turn_off(self, **kwargs) -> None:
         """Turn the light off."""
-        _LOGGER.debug("async_turn_off, kind: %s - value: %s", self.kind, self._off)
+        self._attr_effect = EFFECT_OFF
         await self.coordinator.client.set_control_value(self.kind, self._off)
