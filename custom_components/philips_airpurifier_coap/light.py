@@ -155,13 +155,21 @@ class PhilipsLight(PhilipsEntity, LightEntity):
     @property
     def brightness(self) -> int | None:
         """Return the brightness of the light."""
+
         if self._dimmable:
+            # let's test first if the light has auto capability, and the auto effect is on
+            if self._auto and self._attr_effect == SWITCH_AUTO:
+                return None
+
             brightness = int(self._device_status.get(self.kind))
+
+            # if the light has medium capability, and the brightness is set to medium
             if self._medium and brightness == int(self._medium):
-                if self._auto and brightness == int(self._auto):
-                    return 0
                 return 128
+
+            # finally, this seems to be a truly dimmable light, so return the brightness
             return round(255 * brightness / int(self._on))
+
         return None
 
     async def async_turn_on(self, **kwargs) -> None:
