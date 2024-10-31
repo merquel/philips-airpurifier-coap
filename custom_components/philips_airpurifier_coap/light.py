@@ -163,6 +163,11 @@ class PhilipsLight(PhilipsEntity, LightEntity):
 
             brightness = int(self._device_status.get(self.kind))
 
+            # maybe the light has auto capability and medium capability and the brightness indicates auto, but the effect is not set yet
+            if self._auto and self._medium and brightness == int(self._auto):
+                self._attr_effect = SWITCH_AUTO
+                return None
+
             # if the light has medium capability, and the brightness is set to medium
             if self._medium and brightness == int(self._medium):
                 return 128
