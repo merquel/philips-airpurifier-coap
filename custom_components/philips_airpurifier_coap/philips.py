@@ -1578,8 +1578,8 @@ class PhilipsAC385886(PhilipsAC385x51):
 
 
 # this device seems similar to the AMF family
-class PhilipsAC4221(PhilipsNew2GenericCoAPFan):
-    """AC4221 family."""
+class PhilipsAC4220(PhilipsNew2GenericCoAPFan):
+    """AC4220 family."""
 
     AVAILABLE_PRESET_MODES = {
         PresetMode.AUTO: {
@@ -1629,6 +1629,10 @@ class PhilipsAC4221(PhilipsNew2GenericCoAPFan):
         PhilipsApi.NEW2_AUTO_PLUS_AI,
     ]
     AVAILABLE_SELECTS = [PhilipsApi.NEW2_TIMER2, PhilipsApi.NEW2_LAMP_MODE]
+
+
+class PhilipsAC4221(PhilipsAC4220):
+    """AC4221."""
 
 
 class PhilipsAC4236(PhilipsGenericCoAPFan):
@@ -2051,6 +2055,7 @@ model_to_class = {
     FanModel.AC3858_51: PhilipsAC385851,
     FanModel.AC3858_83: PhilipsAC385883,
     FanModel.AC3858_86: PhilipsAC385886,
+    FanModel.AC4220: PhilipsAC4220,
     FanModel.AC4221: PhilipsAC4221,
     FanModel.AC4236: PhilipsAC4236,
     FanModel.AC4550: PhilipsAC4550,
