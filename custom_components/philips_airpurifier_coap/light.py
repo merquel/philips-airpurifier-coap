@@ -195,7 +195,6 @@ class PhilipsLight(PhilipsEntity, LightEntity):
         else:
             value = self._on
 
-        _LOGGER.debug("async_turn_on, kind: %s - value: %s", self.kind, value)
         await self.coordinator.client.set_control_value(self.kind, value)
 
     async def async_turn_off(self, **kwargs) -> None:
