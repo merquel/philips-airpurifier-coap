@@ -118,6 +118,7 @@ class PhilipsLight(PhilipsEntity, LightEntity):
             if self._auto:
                 self._attr_effect_list = [SWITCH_AUTO]
                 self._attr_effect = EFFECT_OFF
+                self._attr_supported_features |= LightEntityFeature.EFFECT
         else:
             self._attr_color_mode = ColorMode.ONOFF
             self._attr_supported_color_modes = {ColorMode.ONOFF}
@@ -134,17 +135,6 @@ class PhilipsLight(PhilipsEntity, LightEntity):
 
         self._attrs: dict[str, Any] = {}
         self.kind = light.partition("#")[0]
-
-    @property
-    def supported_features(self) -> int:
-        """Return the supported features."""
-
-        features = None
-
-        if self._auto:
-            features = LightEntityFeature.EFFECT
-
-        return features
 
     @property
     def is_on(self) -> bool:
