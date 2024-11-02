@@ -162,6 +162,11 @@ class PhilipsLight(PhilipsEntity, LightEntity):
             if self._medium and brightness == int(self._medium):
                 return 128
 
+            # if the brightness is set to off, return 0 and set the effect to off
+            if brightness == int(self._off):
+                self._attr_effect = EFFECT_OFF
+                return 0
+
             # finally, this seems to be a truly dimmable light, so return the brightness
             return round(255 * brightness / int(self._on))
 
