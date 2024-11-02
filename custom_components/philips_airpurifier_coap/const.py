@@ -49,6 +49,7 @@ class ICON(StrEnum):
     FAN_SPEED_BUTTON = "pap:fan_speed_button"
     HUMIDITY_BUTTON = "pap:humidity_button"
     LIGHT_DIMMING_BUTTON = "pap:light_dimming_button"
+    LIGHT_FUNCTION = "pap:light_function"
     TWO_IN_ONE_MODE_BUTTON = "pap:two_in_one_mode_button"
     SLEEP_MODE = "pap:sleep_mode"
     AUTO_MODE = "pap:auto_mode"
@@ -93,6 +94,7 @@ SWITCH_ON = "on"
 TEST_ON = "on"
 SWITCH_OFF = "off"
 SWITCH_MEDIUM = "medium"
+SWITCH_AUTO = "auto"
 OPTIONS = "options"
 DIMMABLE = "dimmable"
 
@@ -131,6 +133,8 @@ class FanModel(StrEnum):
     AC3858_51 = "AC3858/51"
     AC3858_83 = "AC3858/83"
     AC3858_86 = "AC3858/86"
+    AC4220 = "AC4220"
+    AC4221 = "AC4221"
     AC4236 = "AC4236"
     AC4550 = "AC4550"
     AC4558 = "AC4558"
@@ -224,6 +228,7 @@ class FanAttributes(StrEnum):
     DEVICE_ID = "device_id"
     DEVICE_VERSION = "device_version"
     DISPLAY_BACKLIGHT = "display_backlight"
+    AUTO_DISPLAY_BACKLIGHT = "auto_display_backlight"
     ERROR_CODE = "error_code"
     ERROR = "error"
     RAW = "raw"
@@ -242,6 +247,7 @@ class FanAttributes(StrEnum):
     HUMIDITY_TARGET = "humidity_target"
     INDOOR_ALLERGEN_INDEX = "indoor_allergen_index"
     LABEL = "label"
+    LAMP_MODE = "lamp_mode"
     LEVEL = "level"
     UNIT = "unit"
     VALUE = "value"
@@ -380,6 +386,7 @@ class PhilipsApi:
     NEW2_DISPLAY_BACKLIGHT = "D0312D"
     NEW2_DISPLAY_BACKLIGHT2 = "D03105"
     NEW2_DISPLAY_BACKLIGHT3 = "D03105#1"  # dimmable in 3 steps
+    NEW2_LAMP_MODE = "D03135"
     NEW2_TEMPERATURE = "D03224"
     NEW2_SOFTWARE_VERSION = "D01S12"
     NEW2_CHILD_LOCK = "D03103"
@@ -410,6 +417,11 @@ class PhilipsApi:
     NEW2_PREFERRED_INDEX = "D0312A#1"
     NEW2_GAS_PREFERRED_INDEX = "D0312A#2"
 
+    LAMP_MODE_MAP = {
+        0: ("Off", ICON.LIGHT_FUNCTION),
+        1: ("Air Quality", ICON.LIGHT_FUNCTION),
+        2: ("Ambient", ICON.LIGHT_FUNCTION),
+    }
     PREFERRED_INDEX_MAP = {
         "0": ("Indoor Allergen Index", ICON.IAI),
         "1": ("PM2.5", ICON.PM25),
@@ -811,6 +823,7 @@ LIGHT_TYPES: dict[str, LightDescription] = {
         SWITCH_ON: 123,
         SWITCH_OFF: 0,
         SWITCH_MEDIUM: 115,
+        SWITCH_AUTO: 101,
         DIMMABLE: True,
     },
 }
@@ -830,6 +843,11 @@ SELECT_TYPES: dict[str, SelectDescription] = {
         FanAttributes.LABEL: FanAttributes.HUMIDITY_TARGET,
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         OPTIONS: PhilipsApi.HUMIDITY_TARGET_MAP,
+    },
+    PhilipsApi.NEW2_LAMP_MODE: {
+        FanAttributes.LABEL: FanAttributes.LAMP_MODE,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        OPTIONS: PhilipsApi.LAMP_MODE_MAP,
     },
     PhilipsApi.PREFERRED_INDEX: {
         FanAttributes.LABEL: FanAttributes.PREFERRED_INDEX,

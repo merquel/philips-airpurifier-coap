@@ -90,6 +90,8 @@ Note: `configuration.yaml` is no longer supported and your configuration is not 
 - AC3858/51
 - AC3858/83
 - AC3858/86
+- AC4220
+- AC4221
 - AC4236
 - AC4550
 - AC4558
@@ -198,6 +200,7 @@ The integration also provides the original Philips icons for your use in the fro
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/fan_speed_button.svg)        | fan_speed_button        |
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/humidity_button.svg)         | humidity_button         |
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/light_dimming_button.svg)    | light_dimming_button    |
+| ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/light_function.svg)          | light_function          |
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/two_in_one_mode_button.svg)  | two_in_one_mode_button  |
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/timer_reset_button.svg)      | timer_reset_button      |
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/sleep_mode.svg)              | sleep_mode              |
