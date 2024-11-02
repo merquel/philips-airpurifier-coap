@@ -15,20 +15,13 @@ from homeassistant.components.light import (
     LightEntityFeature,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import (
-    ATTR_DEVICE_CLASS,
-    ATTR_ICON,
-    CONF_ENTITY_CATEGORY,
-    CONF_HOST,
-    CONF_NAME,
-)
+from homeassistant.const import ATTR_DEVICE_CLASS, ATTR_ICON, CONF_ENTITY_CATEGORY
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import PlatformNotReady
 from homeassistant.helpers.entity import Entity
 
+from .config_entry_data import ConfigEntryData
 from .const import (
-    CONF_MODEL,
-    DATA_KEY_COORDINATOR,
     DIMMABLE,
     DOMAIN,
     LIGHT_TYPES,
@@ -39,7 +32,7 @@ from .const import (
     FanAttributes,
     PhilipsApi,
 )
-from .philips import Coordinator, PhilipsEntity, model_to_class
+from .philips import PhilipsEntity, model_to_class
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -50,15 +43,10 @@ async def async_setup_entry(
     async_add_entities: Callable[[list[Entity], bool], None],
 ) -> None:
     """Set up the light platform."""
-    _LOGGER.debug("async_setup_entry called for platform light")
 
-    host = entry.data[CONF_HOST]
-    model = entry.data[CONF_MODEL]
-    name = entry.data[CONF_NAME]
+    config_entry_data: ConfigEntryData = hass.data[DOMAIN][entry.entry_id]
 
-    data = hass.data[DOMAIN][host]
-
-    coordinator = data[DATA_KEY_COORDINATOR]
+    model = config_entry_data.device_information.model
 
     model_class = model_to_class.get(model)
     if model_class:
@@ -69,7 +57,7 @@ async def async_setup_entry(
             available_lights.extend(cls_available_lights)
 
         lights = [
-            PhilipsLight(coordinator, name, model, light)
+            PhilipsLight(hass, entry, config_entry_data, light)
             for light in LIGHT_TYPES
             if light in available_lights
         ]
@@ -86,11 +74,20 @@ class PhilipsLight(PhilipsEntity, LightEntity):
 
     _attr_is_on: bool | None = False
 
-    def __init__(  # noqa: D107
-        self, coordinator: Coordinator, name: str, model: str, light: str
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        config: ConfigEntry,
+        config_entry_data: ConfigEntryData,
+        light: str,
     ) -> None:
-        super().__init__(coordinator)
-        self._model = model
+        """Initialize the light."""
+
+        super().__init__(hass, config, config_entry_data)
+
+        self._model = config_entry_data.device_information.model
+        name = config_entry_data.device_information.name
+
         self._description = LIGHT_TYPES[light]
         self._on = self._description.get(SWITCH_ON)
         self._off = self._description.get(SWITCH_OFF)

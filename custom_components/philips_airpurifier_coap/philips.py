@@ -9,18 +9,21 @@ import logging
 from typing import Any
 
 from homeassistant.components.fan import FanEntity, FanEntityFeature
-from homeassistant.core import callback
-from homeassistant.exceptions import PlatformNotReady
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC, DeviceInfo
 from homeassistant.helpers.entity import Entity
+from homeassistant.util import slugify
 from homeassistant.util.percentage import (
     ordered_list_item_to_percentage,
     percentage_to_ordered_list_item,
 )
 
+from .config_entry_data import ConfigEntryData
 from .const import (
     DOMAIN,
     ICON,
+    MANUFACTURER,
     SWITCH_OFF,
     SWITCH_ON,
     FanAttributes,
@@ -28,7 +31,6 @@ from .const import (
     PhilipsApi,
     PresetMode,
 )
-from .coordinator import Coordinator
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -36,58 +38,52 @@ _LOGGER = logging.getLogger(__name__)
 class PhilipsEntity(Entity):
     """Class to represent a generic Philips entity."""
 
-    def __init__(self, coordinator: Coordinator) -> None:  # noqa: D107
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        entry: ConfigEntry,
+        config_entry_data: ConfigEntryData,
+    ) -> None:
+        """Initialize the PhilipsEntity."""
+
         super().__init__()
-        _LOGGER.debug("PhilipsEntity __init__ called")
-        _LOGGER.debug("coordinator.status is: %s", coordinator.status)
-        self.coordinator = coordinator
-        self._serialNumber = coordinator.status[PhilipsApi.DEVICE_ID]
-        # self._name = coordinator.status["name"]
-        self._name = list(
-            filter(
-                None,
-                map(
-                    coordinator.status.get,
-                    [PhilipsApi.NAME, PhilipsApi.NEW_NAME, PhilipsApi.NEW2_NAME],
-                ),
-            )
-        )[0]
-        # self._modelName = coordinator.status["modelid"]
-        self._modelName = list(
-            filter(
-                None,
-                map(
-                    coordinator.status.get,
-                    [
-                        PhilipsApi.MODEL_ID,
-                        PhilipsApi.NEW_MODEL_ID,
-                        PhilipsApi.NEW2_MODEL_ID,
-                    ],
-                ),
-            )
-        )[0]
-        self._firmware = coordinator.status["WifiVersion"]
-        self._manufacturer = "Philips"
-        self._mac = coordinator.mac
+
+        self.hass = hass
+        self.config_entry = entry
+        self.config_entry_data = config_entry_data
+        self.coordinator = self.config_entry_data.coordinator
+        name = self.config_entry_data.device_information.name
+
+        self._attr_device_info = DeviceInfo(
+            name=name,
+            manufacturer=MANUFACTURER,
+            model=list(
+                filter(
+                    None,
+                    map(
+                        self._device_status.get,
+                        [
+                            PhilipsApi.MODEL_ID,
+                            PhilipsApi.NEW_MODEL_ID,
+                            PhilipsApi.NEW2_MODEL_ID,
+                        ],
+                    ),
+                )
+            )[0],
+            sw_version=self._device_status["WifiVersion"],
+            serial_number=self._device_status[PhilipsApi.DEVICE_ID],
+            identifiers={(DOMAIN, self._device_status[PhilipsApi.DEVICE_ID])},
+            connections={
+                (CONNECTION_NETWORK_MAC, self.config_entry_data.device_information.mac)
+            }
+            if self.config_entry_data.device_information.mac is not None
+            else None,
+        )
 
     @property
     def should_poll(self) -> bool:
         """No need to poll. Coordinator notifies entity of updates."""
         return False
-
-    @property
-    def device_info(self) -> DeviceInfo:
-        """Return info about the device."""
-        return DeviceInfo(
-            identifiers={(DOMAIN, self._serialNumber)},
-            connections={(CONNECTION_NETWORK_MAC, self._mac)}
-            if self._mac is not None
-            else None,
-            name=self._name,
-            model=self._modelName,
-            manufacturer=self._manufacturer,
-            sw_version=self._firmware,
-        )
 
     @property
     def available(self):
@@ -101,45 +97,49 @@ class PhilipsEntity(Entity):
 
     async def async_added_to_hass(self) -> None:
         """Register with hass that routine got added."""
-        await super().async_added_to_hass()
-        self.async_on_remove(
-            self.coordinator.async_add_listener(self._handle_coordinator_update)
+
+        remove_callback = self.coordinator.async_add_listener(
+            self._handle_coordinator_update
         )
+
+        self.async_on_remove(remove_callback)
 
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
+        self.config_entry_data.latest_status = self._device_status
         self.async_write_ha_state()
 
 
 class PhilipsGenericFan(PhilipsEntity, FanEntity):
     """Class to manage a generic Philips fan."""
 
-    def __init__(  # noqa: D107
+    def __init__(
         self,
-        coordinator: Coordinator,
-        model: str,
-        name: str,
+        hass: HomeAssistant,
+        entry: ConfigEntry,
+        config_entry_data: ConfigEntryData,
     ) -> None:
-        super().__init__(coordinator)
-        self._model = model
-        self._name = name
-        self._unique_id = None
+        """Initialize the PhilipsGenericFan."""
 
-    @property
-    def unique_id(self) -> str | None:
-        """Return the unique ID of the fan."""
-        return self._unique_id
+        super().__init__(hass, entry, config_entry_data)
 
-    @property
-    def name(self) -> str:
-        """Return the name of the fan."""
-        return self._name
-
-    @property
-    def icon(self) -> str:
-        """Return the icon of the fan."""
-        return self._icon
+        self._attr_name = list(
+            filter(
+                None,
+                map(
+                    self._device_status.get,
+                    [
+                        PhilipsApi.NAME,
+                        PhilipsApi.NEW_NAME,
+                        PhilipsApi.NEW2_NAME,
+                    ],
+                ),
+            )
+        )[0]
+        self._attr_unique_id = (
+            f"{slugify(self.config_entry_data.device_information.device_id)}_fan"
+        )
 
 
 class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
@@ -161,13 +161,15 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
 
     KEY_OSCILLATION = None
 
-    def __init__(  # noqa: D107
+    def __init__(
         self,
-        coordinator: Coordinator,
-        model: str,
-        name: str,
+        hass: HomeAssistant,
+        entry: ConfigEntry,
+        config_entry_data: ConfigEntryData,
     ) -> None:
-        super().__init__(coordinator, model, name)
+        """Initialize the PhilipsGenericCoAPFanBase."""
+
+        super().__init__(hass, entry, config_entry_data)
 
         self._preset_modes = []
         self._available_preset_modes = {}
@@ -233,7 +235,6 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
     def is_on(self) -> bool:
         """Return if the fan is on."""
         status = self._device_status.get(self.KEY_PHILIPS_POWER)
-        # _LOGGER.debug("is_on: status=%s - test=%s", status, self.STATE_POWER_ON)
         return status == self.STATE_POWER_ON
 
     async def async_turn_on(
@@ -256,11 +257,17 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
             self.KEY_PHILIPS_POWER, self.STATE_POWER_ON
         )
 
+        self._device_status[self.KEY_PHILIPS_POWER] = self.STATE_POWER_ON
+        self._handle_coordinator_update()
+
     async def async_turn_off(self, **kwargs) -> None:
         """Turn the fan off."""
         await self.coordinator.client.set_control_value(
             self.KEY_PHILIPS_POWER, self.STATE_POWER_OFF
         )
+
+        self._device_status[self.KEY_PHILIPS_POWER] = self.STATE_POWER_OFF
+        self._handle_coordinator_update()
 
     @property
     def preset_modes(self) -> list[str] | None:
@@ -289,6 +296,8 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
         status_pattern = self._available_preset_modes.get(preset_mode)
         if status_pattern:
             await self.coordinator.client.set_control_values(data=status_pattern)
+            self._device_status.update(status_pattern)
+            self._handle_coordinator_update()
 
     @property
     def speed_count(self) -> int:
@@ -335,6 +344,9 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
         else:
             await self.coordinator.client.set_control_value(key, off)
 
+        self._device_status[key] = on_value if oscillating else off
+        self._handle_coordinator_update()
+
     @property
     def percentage(self) -> int | None:
         """Return the speed percentages."""
@@ -361,6 +373,7 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
             status_pattern = self._available_speeds.get(speed)
             if status_pattern:
                 await self.coordinator.client.set_control_values(data=status_pattern)
+                self._handle_coordinator_update()
 
     @property
     def extra_state_attributes(self) -> dict[str, Any] | None:
@@ -427,7 +440,6 @@ class PhilipsGenericCoAPFan(PhilipsGenericCoAPFanBase):
         (FanAttributes.SOFTWARE_VERSION, PhilipsApi.SOFTWARE_VERSION),
         (FanAttributes.WIFI_VERSION, PhilipsApi.WIFI_VERSION),
         (FanAttributes.ERROR_CODE, PhilipsApi.ERROR_CODE),
-        # (FanAttributes.ERROR, PhilipsApi.ERROR_CODE, PhilipsApi.ERROR_CODE_MAP),
         # device configuration
         (FanAttributes.LANGUAGE, PhilipsApi.LANGUAGE),
         (
@@ -463,8 +475,6 @@ class PhilipsNewGenericCoAPFan(PhilipsGenericCoAPFanBase):
         (FanAttributes.DEVICE_ID, PhilipsApi.DEVICE_ID),
         (FanAttributes.SOFTWARE_VERSION, PhilipsApi.NEW_SOFTWARE_VERSION),
         (FanAttributes.WIFI_VERSION, PhilipsApi.WIFI_VERSION),
-        # (FanAttributes.ERROR_CODE, PhilipsApi.ERROR_CODE),
-        # (FanAttributes.ERROR, PhilipsApi.ERROR_CODE, PhilipsApi.ERROR_CODE_MAP),
         # device configuration
         (FanAttributes.LANGUAGE, PhilipsApi.NEW_LANGUAGE),
         (
@@ -504,7 +514,6 @@ class PhilipsNew2GenericCoAPFan(PhilipsGenericCoAPFanBase):
         (FanAttributes.SOFTWARE_VERSION, PhilipsApi.NEW2_SOFTWARE_VERSION),
         (FanAttributes.WIFI_VERSION, PhilipsApi.WIFI_VERSION),
         (FanAttributes.ERROR_CODE, PhilipsApi.NEW2_ERROR_CODE),
-        # (FanAttributes.ERROR, PhilipsApi.ERROR_CODE, PhilipsApi.ERROR_CODE_MAP),
         # device configuration
         (
             FanAttributes.PREFERRED_INDEX,
