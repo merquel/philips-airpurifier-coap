@@ -321,6 +321,16 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
         self._available_attributes = []
         self._collect_available_attributes()
 
+        # set the supported features of the fan
+        self._attr_supported_features |= (
+            FanEntityFeature.PRESET_MODE
+            | FanEntityFeature.TURN_OFF
+            | FanEntityFeature.TURN_ON
+        )
+
+        if self.KEY_OSCILLATION is not None:
+            self._attr_supported_features |= FanEntityFeature.OSCILLATE
+
         try:
             device_id = self._device_status[PhilipsApi.DEVICE_ID]
             self._unique_id = f"{self._model}-{device_id}"
@@ -347,6 +357,9 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
 
         self._available_speeds = speeds
         self._speeds = list(self._available_speeds.keys())
+
+        if len(self._speeds) > 0:
+            self._attr_supported_features |= FanEntityFeature.SET_SPEED
 
     def _collect_available_attributes(self):
         attributes = []
@@ -389,24 +402,6 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
         await self.coordinator.client.set_control_value(
             self.KEY_PHILIPS_POWER, self.STATE_POWER_OFF
         )
-
-    @property
-    def supported_features(self) -> int:
-        """Return the supported features."""
-
-        features = (
-            FanEntityFeature.PRESET_MODE
-            | FanEntityFeature.TURN_OFF
-            | FanEntityFeature.TURN_ON
-        )
-
-        if self._speeds:
-            features |= FanEntityFeature.SET_SPEED
-
-        if self.KEY_OSCILLATION is not None:
-            features |= FanEntityFeature.OSCILLATE
-
-        return features
 
     @property
     def preset_modes(self) -> list[str] | None:
