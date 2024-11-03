@@ -195,7 +195,8 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
 
         try:
             device_id = self._device_status[PhilipsApi.DEVICE_ID]
-            self._unique_id = f"{self._model}-{device_id}"
+            model = self.config_entry_data.device_information.model
+            self._unique_id = f"{model}-{device_id}"
         except Exception as e:
             _LOGGER.error("Failed retrieving unique_id: %s", e)
             raise PlatformNotReady from e
