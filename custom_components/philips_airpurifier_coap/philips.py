@@ -11,7 +11,6 @@ from typing import Any
 from homeassistant.components.fan import FanEntity, FanEntityFeature
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.exceptions import PlatformNotReady
 from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC, DeviceInfo
 from homeassistant.helpers.entity import Entity
 from homeassistant.util import slugify
@@ -192,14 +191,6 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
 
         if self.KEY_OSCILLATION is not None:
             self._attr_supported_features |= FanEntityFeature.OSCILLATE
-
-        try:
-            device_id = self._device_status[PhilipsApi.DEVICE_ID]
-            model = self.config_entry_data.device_information.model
-            self._unique_id = f"{model}-{device_id}"
-        except Exception as e:
-            _LOGGER.error("Failed retrieving unique_id: %s", e)
-            raise PlatformNotReady from e
 
     def _collect_available_preset_modes(self):
         preset_modes = {}
