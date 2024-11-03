@@ -373,7 +373,9 @@ class PhilipsGenericCoAPFanBase(PhilipsGenericFan):
             status_pattern = self._available_speeds.get(speed)
             if status_pattern:
                 await self.coordinator.client.set_control_values(data=status_pattern)
-                self._handle_coordinator_update()
+
+            self._device_status.update(status_pattern)
+            self._handle_coordinator_update()
 
     @property
     def extra_state_attributes(self) -> dict[str, Any] | None:
