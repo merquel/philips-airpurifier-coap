@@ -17,8 +17,8 @@ from homeassistant.components.light import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_DEVICE_CLASS, ATTR_ICON, CONF_ENTITY_CATEGORY
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import PlatformNotReady
 from homeassistant.helpers.entity import Entity
+from homeassistant.util import slugify
 
 from .config_entry_data import ConfigEntryData
 from .const import (
@@ -30,7 +30,6 @@ from .const import (
     SWITCH_OFF,
     SWITCH_ON,
     FanAttributes,
-    PhilipsApi,
 )
 from .philips import PhilipsEntity, model_to_class
 
@@ -120,15 +119,9 @@ class PhilipsLight(PhilipsEntity, LightEntity):
             self._attr_color_mode = ColorMode.ONOFF
             self._attr_supported_color_modes = {ColorMode.ONOFF}
 
-        try:
-            device_id = self._device_status[PhilipsApi.DEVICE_ID]
-            self._attr_unique_id = f"{self._model}-{device_id}-{light.lower()}"
-        except KeyError as e:
-            _LOGGER.error("Failed retrieving unique_id due to missing key: %s", e)
-            raise PlatformNotReady from e
-        except TypeError as e:
-            _LOGGER.error("Failed retrieving unique_id due to type error: %s", e)
-            raise PlatformNotReady from e
+        model = config_entry_data.device_information.model
+        device_id = config_entry_data.device_information.device_id
+        self._attr_unique_id = f"{slugify(model)}-{slugify(device_id)}-{light.lower()}"
 
         self._attrs: dict[str, Any] = {}
         self.kind = light.partition("#")[0]

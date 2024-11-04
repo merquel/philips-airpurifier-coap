@@ -137,9 +137,9 @@ class PhilipsGenericFan(PhilipsEntity, FanEntity):
                 ),
             )
         )[0]
-        self._attr_unique_id = (
-            f"{slugify(self.config_entry_data.device_information.device_id)}_fan"
-        )
+        model = config_entry_data.device_information.model
+        device_id = config_entry_data.device_information.device_id
+        self._attr_unique_id = f"{slugify(model)}-{slugify(device_id)}"
 
 
 class PhilipsGenericCoAPFanBase(PhilipsGenericFan):

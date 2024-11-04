@@ -10,11 +10,11 @@ from homeassistant.components.number import NumberEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_DEVICE_CLASS, ATTR_ICON, CONF_ENTITY_CATEGORY
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import PlatformNotReady
 from homeassistant.helpers.entity import Entity
+from homeassistant.util import slugify
 
 from .config_entry_data import ConfigEntryData
-from .const import DOMAIN, NUMBER_TYPES, FanAttributes, PhilipsApi
+from .const import DOMAIN, NUMBER_TYPES, FanAttributes
 from .philips import PhilipsEntity, model_to_class
 
 _LOGGER = logging.getLogger(__name__)
@@ -86,15 +86,9 @@ class PhilipsNumber(PhilipsEntity, NumberEntity):
         self._attr_native_max_value = self._description.get(FanAttributes.MAX)
         self._attr_native_step = self._description.get(FanAttributes.STEP)
 
-        try:
-            device_id = self._device_status[PhilipsApi.DEVICE_ID]
-            self._attr_unique_id = f"{self._model}-{device_id}-{number.lower()}"
-        except KeyError as e:
-            _LOGGER.error("Failed retrieving unique_id due to missing key: %s", e)
-            raise PlatformNotReady from e
-        except TypeError as e:
-            _LOGGER.error("Failed retrieving unique_id due to type error: %s", e)
-            raise PlatformNotReady from e
+        model = config_entry_data.device_information.model
+        device_id = config_entry_data.device_information.device_id
+        self._attr_unique_id = f"{slugify(model)}-{slugify(device_id)}-{number.lower()}"
 
         self._attrs: dict[str, Any] = {}
         self.kind = number

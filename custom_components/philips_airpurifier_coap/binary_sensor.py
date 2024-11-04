@@ -10,11 +10,11 @@ from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_DEVICE_CLASS, CONF_ENTITY_CATEGORY
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import PlatformNotReady
 from homeassistant.helpers.entity import Entity
+from homeassistant.util import slugify
 
 from .config_entry_data import ConfigEntryData
-from .const import BINARY_SENSOR_TYPES, DOMAIN, FanAttributes, PhilipsApi
+from .const import BINARY_SENSOR_TYPES, DOMAIN, FanAttributes
 from .philips import PhilipsEntity, model_to_class
 
 _LOGGER = logging.getLogger(__name__)
@@ -79,12 +79,9 @@ class PhilipsBinarySensor(PhilipsEntity, BinarySensorEntity):
             f"{name} {self._description[FanAttributes.LABEL].replace('_', ' ').title()}"
         )
 
-        try:
-            device_id = self._device_status[PhilipsApi.DEVICE_ID]
-            self._attr_unique_id = f"{self._model}-{device_id}-{kind.lower()}"
-        except KeyError as e:
-            _LOGGER.error("Failed retrieving unique_id: %s", e)
-            raise PlatformNotReady from e
+        model = config_entry_data.device_information.model
+        device_id = config_entry_data.device_information.device_id
+        self._attr_unique_id = f"{slugify(model)}-{slugify(device_id)}-{kind.lower()}"
 
         self._attrs: dict[str, Any] = {}
         self.kind = kind

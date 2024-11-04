@@ -10,11 +10,11 @@ from homeassistant.components.select import SelectEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_DEVICE_CLASS, CONF_ENTITY_CATEGORY
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import PlatformNotReady
 from homeassistant.helpers.entity import Entity
+from homeassistant.util import slugify
 
 from .config_entry_data import ConfigEntryData
-from .const import DOMAIN, OPTIONS, SELECT_TYPES, FanAttributes, PhilipsApi
+from .const import DOMAIN, OPTIONS, SELECT_TYPES, FanAttributes
 from .philips import PhilipsEntity, model_to_class
 
 _LOGGER = logging.getLogger(__name__)
@@ -88,15 +88,9 @@ class PhilipsSelect(PhilipsEntity, SelectEntity):
             self._icons[option_name] = icon
             self._options[key] = option_name
 
-        try:
-            device_id = self._device_status[PhilipsApi.DEVICE_ID]
-            self._attr_unique_id = f"{self._model}-{device_id}-{select.lower()}"
-        except KeyError as e:
-            _LOGGER.error("Failed retrieving unique_id due to missing key: %s", e)
-            raise PlatformNotReady from e
-        except TypeError as e:
-            _LOGGER.error("Failed retrieving unique_id due to type error: %s", e)
-            raise PlatformNotReady from e
+        model = config_entry_data.device_information.model
+        device_id = config_entry_data.device_information.device_id
+        self._attr_unique_id = f"{slugify(model)}-{slugify(device_id)}-{select.lower()}"
 
         self._attrs: dict[str, Any] = {}
         self.kind = select.partition("#")[0]

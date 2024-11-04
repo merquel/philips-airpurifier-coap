@@ -10,18 +10,11 @@ from homeassistant.components.switch import SwitchEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_DEVICE_CLASS, ATTR_ICON, CONF_ENTITY_CATEGORY
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import PlatformNotReady
 from homeassistant.helpers.entity import Entity
+from homeassistant.util import slugify
 
 from .config_entry_data import ConfigEntryData
-from .const import (
-    DOMAIN,
-    SWITCH_OFF,
-    SWITCH_ON,
-    SWITCH_TYPES,
-    FanAttributes,
-    PhilipsApi,
-)
+from .const import DOMAIN, SWITCH_OFF, SWITCH_ON, SWITCH_TYPES, FanAttributes
 from .philips import PhilipsEntity, model_to_class
 
 _LOGGER = logging.getLogger(__name__)
@@ -88,12 +81,9 @@ class PhilipsSwitch(PhilipsEntity, SwitchEntity):
         )
         self._attr_entity_category = self._description.get(CONF_ENTITY_CATEGORY)
 
-        try:
-            device_id = self._device_status[PhilipsApi.DEVICE_ID]
-            self._attr_unique_id = f"{self._model}-{device_id}-{switch.lower()}"
-        except KeyError as e:
-            _LOGGER.error("Failed retrieving unique_id: %s", e)
-            raise PlatformNotReady from e
+        model = config_entry_data.device_information.model
+        device_id = config_entry_data.device_information.device_id
+        self._attr_unique_id = f"{slugify(model)}-{slugify(device_id)}-{switch.lower()}"
 
         self._attrs: dict[str, Any] = {}
         self.kind = switch
