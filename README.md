@@ -59,6 +59,8 @@ Note: `configuration.yaml` is no longer supported and your configuration is not 
 
 ## Supported models
 
+Note: Some of these models seem to have a newer firmware that does not allow local connections anymore. If you buy the device with the intention to manage it via Home Assistant, make sure you can return it, if the integration doesn't work for you.
+
 - AC0850/11 AWS_Philips_AIR
 - AC0850/11 AWS_Philips_AIR_Combo
 - AC0850/20 AWS_Philips_AIR
@@ -79,6 +81,9 @@ Note: `configuration.yaml` is no longer supported and your configuration is not 
 - AC3039
 - AC3055
 - AC3059
+- AC3210
+- AC3220
+- AC3221
 - AC3421
 - AC3259
 - AC3737
