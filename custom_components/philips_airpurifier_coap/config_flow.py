@@ -44,6 +44,7 @@ class PhilipsAirPurifierConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self._name: Any = None
         self._device_id: str = None
         self._wifi_version: Any = None
+        self._status: Any = None
 
     def _get_schema(self, user_input):
         """Provide schema for user input."""
@@ -130,6 +131,7 @@ class PhilipsAirPurifierConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             self._model,
             self._name,
         )
+        self._status = status
 
         # check if model is supported
         model_long = self._model + " " + self._wifi_version.split("@")[0]
@@ -187,10 +189,11 @@ class PhilipsAirPurifierConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             user_input[CONF_NAME] = self._name
             user_input[CONF_DEVICE_ID] = self._device_id
             user_input[CONF_HOST] = self._host
+            user_input[CONF_STATUS] = self._status
 
-            return self.async_create_entry(
-                title=self._model + " " + self._name, data=user_input
-            )
+            config_entry_name = f"{self._model} {self._name}"
+
+            return self.async_create_entry(config_entry_name, data=user_input)
 
         _LOGGER.debug("showing confirmation form")
         # show the form to the user
