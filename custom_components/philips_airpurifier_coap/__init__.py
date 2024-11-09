@@ -128,7 +128,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     model = entry.data[CONF_MODEL]
     name = entry.data[CONF_NAME]
     device_id = entry.data[CONF_DEVICE_ID]
-    status = entry.data[CONF_STATUS]
     mac = await async_get_mac_address_from_host(hass, host)
 
     _LOGGER.debug("async_setup_entry called for host %s", host)
@@ -145,9 +144,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         host=host, mac=mac, model=model, name=name, device_id=device_id
     )
 
-    coordinator = Coordinator(hass, client, host, status)
-    _LOGGER.debug("got a valid coordinator for host %s", host)
+    # check if we have status data, it will be missing in old entries
+    if CONF_STATUS not in entry.data:
+        _LOGGER.warning("No status data found for model %s, trying to fetch it", model)
+        coordinator = Coordinator(hass, client, host, None)
+        await coordinator.async_first_refresh()
+        status = coordinator.status
 
+    else:
+        status = entry.data[CONF_STATUS]
+        coordinator = Coordinator(hass, client, host, status)
+
+    # store the data in the hass.data
     config_entry_data = ConfigEntryData(
         device_information=device_information,
         coordinator=coordinator,
