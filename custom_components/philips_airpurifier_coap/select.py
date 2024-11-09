@@ -11,7 +11,6 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_DEVICE_CLASS, CONF_ENTITY_CATEGORY
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import Entity
-from homeassistant.util import slugify
 
 from .config_entry_data import ConfigEntryData
 from .const import DOMAIN, OPTIONS, SELECT_TYPES, FanAttributes
@@ -90,7 +89,7 @@ class PhilipsSelect(PhilipsEntity, SelectEntity):
 
         model = config_entry_data.device_information.model
         device_id = config_entry_data.device_information.device_id
-        self._attr_unique_id = f"{slugify(model)}-{slugify(device_id)}-{select.lower()}"
+        self._attr_unique_id = f"{model}-{device_id}-{select.lower()}"
 
         self._attrs: dict[str, Any] = {}
         self.kind = select.partition("#")[0]

@@ -13,7 +13,6 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC, DeviceInfo
 from homeassistant.helpers.entity import Entity
-from homeassistant.util import slugify
 from homeassistant.util.percentage import (
     ordered_list_item_to_percentage,
     percentage_to_ordered_list_item,
@@ -139,7 +138,7 @@ class PhilipsGenericFan(PhilipsEntity, FanEntity):
         )[0]
         model = config_entry_data.device_information.model
         device_id = config_entry_data.device_information.device_id
-        self._attr_unique_id = f"{slugify(model)}-{slugify(device_id)}"
+        self._attr_unique_id = f"{model}-{device_id}"
 
 
 class PhilipsGenericCoAPFanBase(PhilipsGenericFan):

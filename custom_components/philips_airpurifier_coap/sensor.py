@@ -19,7 +19,6 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import PlatformNotReady
 from homeassistant.helpers.entity import Entity, EntityCategory
 from homeassistant.helpers.typing import StateType
-from homeassistant.util import slugify
 
 from .config_entry_data import ConfigEntryData
 from .const import (
@@ -123,7 +122,7 @@ class PhilipsSensor(PhilipsEntity, SensorEntity):
 
         model = config_entry_data.device_information.model
         device_id = config_entry_data.device_information.device_id
-        self._attr_unique_id = f"{slugify(model)}-{slugify(device_id)}-{kind.lower()}"
+        self._attr_unique_id = f"{model}-{device_id}-{kind.lower()}"
 
         self._attrs: dict[str, Any] = {}
         self.kind = kind
