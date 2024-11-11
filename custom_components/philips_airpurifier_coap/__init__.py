@@ -151,6 +151,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         await coordinator.async_first_refresh()
         status = coordinator.status
 
+        # update the entry with the status data
+        new_data = {**entry.data}
+        new_data[CONF_STATUS] = status
+        hass.config_entries.async_update_entry(entry, data=new_data)
+
     else:
         status = entry.data[CONF_STATUS]
         coordinator = Coordinator(hass, client, host, status)
