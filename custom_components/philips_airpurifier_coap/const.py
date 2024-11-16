@@ -19,6 +19,7 @@ from homeassistant.const import (
     PERCENTAGE,
     SIGNAL_STRENGTH_DECIBELS_MILLIWATT,
     UnitOfTemperature,
+    UnitOfTime,
 )
 from homeassistant.helpers.entity import EntityCategory
 
@@ -151,6 +152,7 @@ class FanModel(StrEnum):
     AMF870 = "AMF870"
     CX3550 = "CX3550"
     CX5120 = "CX5120"
+    HU5710 = "HU5710"
 
 
 class PresetMode:
@@ -256,6 +258,7 @@ class FanAttributes(StrEnum):
     INDOOR_ALLERGEN_INDEX = "indoor_allergen_index"
     LABEL = "label"
     LAMP_MODE = "lamp_mode"
+    AMBIENT_LIGHT_MODE = "ambient_light_mode"
     LEVEL = "level"
     UNIT = "unit"
     VALUE = "value"
@@ -293,6 +296,7 @@ class FanAttributes(StrEnum):
     STANDBY_SENSORS = "standby_sensors"
     AUTO_PLUS = "auto_plus"
     WATER_TANK = "water_tank"
+    QUICKDRY_MODE = "quickdry_mode"
 
 
 class FanUnits(StrEnum):
@@ -394,7 +398,9 @@ class PhilipsApi:
     NEW2_DISPLAY_BACKLIGHT = "D0312D"
     NEW2_DISPLAY_BACKLIGHT2 = "D03105"
     NEW2_DISPLAY_BACKLIGHT3 = "D03105#1"  # dimmable in 3 steps
-    NEW2_LAMP_MODE = "D03135"
+    NEW2_LAMP_MODE = "D03135#1"
+    NEW2_LAMP_MODE2 = "D03135#2"
+    NEW2_AMBIENT_LIGHT_MODE = "D03137"
     NEW2_TEMPERATURE = "D03224"
     NEW2_SOFTWARE_VERSION = "D01S12"
     NEW2_CHILD_LOCK = "D03103"
@@ -404,7 +410,8 @@ class PhilipsApi:
     NEW2_GAS = "D03122"
     NEW2_HUMIDITY = "D03125"
     NEW2_ERROR_CODE = "D03240"
-    NEW2_HUMIDITY_TARGET = "D03128"
+    NEW2_HUMIDITY_TARGET = "D03128#1"
+    NEW2_HUMIDITY_TARGET2 = "D03128#2"
     NEW2_FILTER_NANOPROTECT_PREFILTER = "D0520D"
     NEW2_FILTER_NANOPROTECT = "D0540E"
     NEW2_FILTER_NANOPROTECT_PREFILTER_TOTAL = "D05207"
@@ -419,6 +426,8 @@ class PhilipsApi:
     NEW2_MODE_C = "D0310D"
     NEW2_TIMER = "D03110#1"
     NEW2_TIMER2 = "D03110#2"
+    NEW2_AUTO_QUICKDRY_MODE = "D03138"
+    NEW2_REMAINING_TIME = "D03211"
     NEW2_TARGET_TEMP = "D0310E"
     NEW2_STANDBY_SENSORS = "D03134"
     NEW2_AUTO_PLUS_AI = "D03180"
@@ -429,6 +438,18 @@ class PhilipsApi:
         0: ("Off", ICON.LIGHT_FUNCTION),
         1: ("Air Quality", ICON.LIGHT_FUNCTION),
         2: ("Ambient", ICON.LIGHT_FUNCTION),
+    }
+    LAMP_MODE_MAP2 = {
+        0: ("Off", ICON.LIGHT_FUNCTION),
+        1: ("Humidity", ICON.LIGHT_FUNCTION),
+        2: ("Ambient", ICON.LIGHT_FUNCTION),
+    }
+    AMBIENT_LIGHT_MODE_MAP = {
+        0: ("Off", ICON.LIGHT_FUNCTION),
+        1: ("Warm", ICON.LIGHT_FUNCTION),
+        2: ("Dawn", ICON.LIGHT_FUNCTION),
+        3: ("Calm", ICON.LIGHT_FUNCTION),
+        4: ("Breath", ICON.LIGHT_FUNCTION),
     }
     PREFERRED_INDEX_MAP = {
         "0": ("Indoor Allergen Index", ICON.IAI),
@@ -566,6 +587,13 @@ SENSOR_TYPES: dict[str, SensorDescription] = {
         FanAttributes.LABEL: FanAttributes.HUMIDITY,
         ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
         FanAttributes.UNIT: PERCENTAGE,
+    },
+    PhilipsApi.NEW2_REMAINING_TIME: {
+        ATTR_DEVICE_CLASS: SensorDeviceClass.DURATION,
+        FanAttributes.ICON_MAP: {0: "mdi:timer"},
+        FanAttributes.LABEL: FanAttributes.TIME_REMAINING,
+        ATTR_STATE_CLASS: SensorStateClass.MEASUREMENT,
+        FanAttributes.UNIT: UnitOfTime.MINUTES,
     },
     PhilipsApi.TEMPERATURE: {
         ATTR_DEVICE_CLASS: SensorDeviceClass.TEMPERATURE,
@@ -783,6 +811,12 @@ SWITCH_TYPES: dict[str, SwitchDescription] = {
         SWITCH_ON: 1,
         SWITCH_OFF: 0,
     },
+    PhilipsApi.NEW2_AUTO_QUICKDRY_MODE: {
+        ATTR_ICON: "mdi:clock-fast",
+        FanAttributes.LABEL: FanAttributes.QUICKDRY_MODE,
+        SWITCH_ON: 1,
+        SWITCH_OFF: 0,
+    },
 }
 
 LIGHT_TYPES: dict[str, LightDescription] = {
@@ -857,6 +891,16 @@ SELECT_TYPES: dict[str, SelectDescription] = {
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         OPTIONS: PhilipsApi.LAMP_MODE_MAP,
     },
+    PhilipsApi.NEW2_LAMP_MODE2: {
+        FanAttributes.LABEL: FanAttributes.LAMP_MODE,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        OPTIONS: PhilipsApi.LAMP_MODE_MAP2,
+    },
+    PhilipsApi.NEW2_AMBIENT_LIGHT_MODE: {
+        FanAttributes.LABEL: FanAttributes.AMBIENT_LIGHT_MODE,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        OPTIONS: PhilipsApi.AMBIENT_LIGHT_MODE_MAP,
+    },
     PhilipsApi.PREFERRED_INDEX: {
         FanAttributes.LABEL: FanAttributes.PREFERRED_INDEX,
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
@@ -925,5 +969,15 @@ NUMBER_TYPES: dict[str, NumberDescription] = {
         FanAttributes.MIN: 1,
         FanAttributes.MAX: 37,
         FanAttributes.STEP: 1,
+    },
+    PhilipsApi.NEW2_HUMIDITY_TARGET2: {
+        FanAttributes.LABEL: FanAttributes.HUMIDITY_TARGET,
+        ATTR_ICON: "mdi:water-percent",
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+        FanAttributes.UNIT: PERCENTAGE,
+        FanAttributes.OFF: 30,
+        FanAttributes.MIN: 30,
+        FanAttributes.MAX: 70,
+        FanAttributes.STEP: 5,
     },
 }
