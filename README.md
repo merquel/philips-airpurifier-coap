@@ -107,6 +107,7 @@ Note: Some of these models seem to have a newer firmware that does not allow loc
 - AMF870
 - CX5120
 - CX3550
+- HU5710
 
 
 ## Is your model not supported yet?
