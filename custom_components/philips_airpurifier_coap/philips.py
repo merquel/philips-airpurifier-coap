@@ -1936,7 +1936,7 @@ class PhilipsHU5710(PhilipsNew2GenericCoAPFan):
         PhilipsApi.NEW2_AUTO_QUICKDRY_MODE,
         PhilipsApi.NEW2_STANDBY_SENSORS,
     ]
-    AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT3]
+    AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT4]
     AVAILABLE_SELECTS = [
         PhilipsApi.NEW2_GAS_PREFERRED_INDEX,
         PhilipsApi.NEW2_TIMER2,
