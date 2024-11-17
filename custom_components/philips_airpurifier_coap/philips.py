@@ -1943,6 +1943,7 @@ class PhilipsHU5710(PhilipsNew2GenericCoAPFan):
         PhilipsApi.NEW2_AMBIENT_LIGHT_MODE,
     ]
     AVAILABLE_NUMBERS = [PhilipsApi.NEW2_HUMIDITY_TARGET2]
+    AVAILABLE_BINARY_SENSORS = [PhilipsApi.NEW2_ERROR_CODE]
 
 
 model_to_class = {
