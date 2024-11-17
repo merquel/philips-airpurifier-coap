@@ -1938,7 +1938,6 @@ class PhilipsHU5710(PhilipsNew2GenericCoAPFan):
     ]
     AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT4]
     AVAILABLE_SELECTS = [
-        PhilipsApi.NEW2_GAS_PREFERRED_INDEX,
         PhilipsApi.NEW2_TIMER2,
         PhilipsApi.NEW2_LAMP_MODE2,
         PhilipsApi.NEW2_AMBIENT_LIGHT_MODE,
