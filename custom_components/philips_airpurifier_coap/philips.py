@@ -1933,6 +1933,7 @@ class PhilipsHU5710(PhilipsNew2GenericCoAPFan):
     AVAILABLE_SWITCHES = [
         PhilipsApi.NEW2_CHILD_LOCK,
         PhilipsApi.NEW2_BEEP,
+        PhilipsApi.NEW2_QUICKDRY_MODE,
         PhilipsApi.NEW2_AUTO_QUICKDRY_MODE,
         PhilipsApi.NEW2_STANDBY_SENSORS,
     ]

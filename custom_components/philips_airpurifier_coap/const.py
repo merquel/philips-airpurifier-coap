@@ -296,6 +296,7 @@ class FanAttributes(StrEnum):
     STANDBY_SENSORS = "standby_sensors"
     AUTO_PLUS = "auto_plus"
     WATER_TANK = "water_tank"
+    AUTO_QUICKDRY_MODE = "auto_quickdry_mode"
     QUICKDRY_MODE = "quickdry_mode"
 
 
@@ -428,6 +429,7 @@ class PhilipsApi:
     NEW2_TIMER = "D03110#1"
     NEW2_TIMER2 = "D03110#2"
     NEW2_AUTO_QUICKDRY_MODE = "D03138"
+    NEW2_QUICKDRY_MODE = "D03139"
     NEW2_REMAINING_TIME = "D03211"
     NEW2_TARGET_TEMP = "D0310E"
     NEW2_STANDBY_SENSORS = "D03134"
@@ -812,6 +814,12 @@ SWITCH_TYPES: dict[str, SwitchDescription] = {
         SWITCH_OFF: 0,
     },
     PhilipsApi.NEW2_AUTO_QUICKDRY_MODE: {
+        ATTR_ICON: "mdi:clock-fast",
+        FanAttributes.LABEL: FanAttributes.AUTO_QUICKDRY_MODE,
+        SWITCH_ON: 1,
+        SWITCH_OFF: 0,
+    },
+    PhilipsApi.NEW2_QUICKDRY_MODE: {
         ATTR_ICON: "mdi:clock-fast",
         FanAttributes.LABEL: FanAttributes.QUICKDRY_MODE,
         SWITCH_ON: 1,
