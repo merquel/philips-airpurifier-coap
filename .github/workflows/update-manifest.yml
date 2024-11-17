@@ -1,0 +1,36 @@
+name: Update manifest.json and Prepare Release
+
+on:
+  push:
+    tags:
+      - 'v*' # Trigger on tags that match version patterns like v1.0.0
+
+jobs:
+  update-manifest:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Extract the release version from the tag name
+      - name: Get Release Version
+        id: get_version
+        run: echo "release_version=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      # Update the manifest.json file with the release version
+      - name: Update manifest.json
+        run: |
+          version=${{ env.release_version }}
+          jq --arg version "$version" '.version = $version' custom_components/philips-airpurifier-coap/manifest.json > temp.json
+          mv temp.json custom_components/philips-airpurifier-coap/manifest.json
+
+      # Commit and push changes
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add custom_components/philips-airpurifier-coap/manifest.json
+          git commit -m "Update manifest.json to version ${{ env.release_version }}"
+          git push
