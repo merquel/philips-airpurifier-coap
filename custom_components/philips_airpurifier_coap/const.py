@@ -446,7 +446,6 @@ class PhilipsApi:
         2: ("Ambient", ICON.LIGHT_FUNCTION),
     }
     AMBIENT_LIGHT_MODE_MAP = {
-        0: ("Off", ICON.LIGHT_FUNCTION),
         1: ("Warm", ICON.LIGHT_FUNCTION),
         2: ("Dawn", ICON.LIGHT_FUNCTION),
         3: ("Calm", ICON.LIGHT_FUNCTION),
