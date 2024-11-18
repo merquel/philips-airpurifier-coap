@@ -8,6 +8,8 @@ on:
 jobs:
   update-manifest:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       # Checkout the repository
@@ -19,12 +21,16 @@ jobs:
         id: get_version
         run: echo "release_version=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
+      # Debug: List files in the repository
+      - name: List Repository Files
+        run: ls -R
+
       # Update the manifest.json file with the release version
       - name: Update manifest.json
         run: |
           version=${{ env.release_version }}
-          jq --arg version "$version" '.version = $version' custom_components/philips-airpurifier-coap/manifest.json > temp.json
-          mv temp.json custom_components/philips-airpurifier-coap/manifest.json
+          jq --arg version "$version" '.version = $version' custom_components/philips_airpurifier_coap/manifest.json > temp.json
+          mv temp.json custom_components/philips_airpurifier_coap/manifest.json
 
       # Commit and push changes
       - name: Commit and Push Changes
