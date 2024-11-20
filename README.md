@@ -209,6 +209,7 @@ The integration also provides the original Philips icons for your use in the fro
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/humidity_button.svg)         | humidity_button         |
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/light_dimming_button.svg)    | light_dimming_button    |
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/light_function.svg)          | light_function          |
+| ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/ambient_light.svg)           | ambient_light           |
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/two_in_one_mode_button.svg)  | two_in_one_mode_button  |
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/timer_reset_button.svg)      | timer_reset_button      |
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/sleep_mode.svg)              | sleep_mode              |

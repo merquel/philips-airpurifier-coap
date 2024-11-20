@@ -52,6 +52,7 @@ class ICON(StrEnum):
     HUMIDITY_BUTTON = "pap:humidity_button"
     LIGHT_DIMMING_BUTTON = "pap:light_dimming_button"
     LIGHT_FUNCTION = "pap:light_function"
+    AMBIENT_LIGHT = "pap:ambient_light"
     TWO_IN_ONE_MODE_BUTTON = "pap:two_in_one_mode_button"
     SLEEP_MODE = "pap:sleep_mode"
     AUTO_MODE = "pap:auto_mode"
@@ -448,10 +449,10 @@ class PhilipsApi:
         2: ("Ambient", ICON.LIGHT_FUNCTION),
     }
     AMBIENT_LIGHT_MODE_MAP = {
-        1: ("Warm", ICON.LIGHT_FUNCTION),
-        2: ("Dawn", ICON.LIGHT_FUNCTION),
-        3: ("Calm", ICON.LIGHT_FUNCTION),
-        4: ("Breath", ICON.LIGHT_FUNCTION),
+        1: ("Warm", ICON.AMBIENT_LIGHT),
+        2: ("Dawn", ICON.AMBIENT_LIGHT),
+        3: ("Calm", ICON.AMBIENT_LIGHT),
+        4: ("Breath", ICON.AMBIENT_LIGHT),
     }
     PREFERRED_INDEX_MAP = {
         "0": ("Indoor Allergen Index", ICON.IAI),
