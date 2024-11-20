@@ -9,7 +9,7 @@ import logging
 from typing import Any
 
 from homeassistant.components.fan import FanEntity, FanEntityFeature
-from homeassistant.components.humidifier import HumidifierEntity
+from homeassistant.components.humidifier import HumidifierEntity, HumidifierEntityFeature
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC, DeviceInfo
