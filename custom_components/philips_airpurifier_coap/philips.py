@@ -542,13 +542,19 @@ class PhilipsNew2GenericCoAPHumidifier(PhilipsNew2GenericCoAPFan):
     """Class to manage a Philips humidifier with CoAP."""
 
     def __init__(self, hass, entry, config_entry_data):
+        """Initialize the humidifier entity."""
         super().__init__(hass, entry, config_entry_data)
 
-        self._attr_supported_features = (
-            HumidifierEntityFeature.MODES | HumidifierEntityFeature.TARGET_HUMIDITY
-        )
+        # Set the supported features to MODES only
+        self._attr_supported_features = HumidifierEntityFeature.MODES
+
+        # Define available modes
         self._attr_humidifier_modes = ["auto", "high", "medium", "sleep"]
-        self._attr_target_humidity = self._device_status.get(PhilipsApi.NEW2_HUMIDITY_TARGET2, 50)
+
+        # Initialize target humidity and bounds
+        self._attr_target_humidity = self._device_status.get(
+            PhilipsApi.NEW2_HUMIDITY_TARGET2, 50
+        )
         self._attr_min_humidity = 30
         self._attr_max_humidity = 70
 
@@ -599,11 +605,6 @@ class PhilipsNew2GenericCoAPHumidifier(PhilipsNew2GenericCoAPFan):
         )
         self._device_status[PhilipsApi.NEW2_MODE_B] = mode_mapping[mode]
         self._handle_coordinator_update()
-
-        """Set the humidifier mode."""
-        if mode not in self._attr_humidifier_modes:
-            raise ValueError(f"Invalid mode: {mode}")
-        await self.async_set_preset_mode(mode)
 
 # similar to the AC1715, the AC0850 seems to be a new class of devices that
 # follows some patterns of its own
