@@ -59,10 +59,16 @@ class ListingView(HomeAssistantView):
         self.iconpath = iconpath
         self.name = "Icon Listing"
 
-    async def get(self, request):
+    async def get(self, request, *args):
+        """Call executor to avoid blocking I/O call to get list of used icons."""
+        return await self.hass.async_add_executor_job(
+            self.get_icons_list, self.iconpath
+        )
+
+    def get_icons_list(self, iconpath):
         """Handle GET request to provide a JSON list of the used icons."""
         icons = []
-        for dirpath, _dirnames, filenames in walk(self.iconpath):
+        for dirpath, _dirnames, filenames in walk(iconpath):
             icons.extend(
                 [
                     {"name": (Path(dirpath[len(self.iconpath) :]) / fn[:-4]).as_posix()}
