@@ -538,49 +538,68 @@ class PhilipsHumidifierMixin(PhilipsGenericCoAPFanBase):
     AVAILABLE_SELECTS = [PhilipsApi.FUNCTION, PhilipsApi.HUMIDITY_TARGET]
     AVAILABLE_BINARY_SENSORS = [PhilipsApi.ERROR_CODE]
 
-class PhilipsNew2GenericCoAPHumidifier(PhilipsNew2GenericCoAPFan, HumidifierEntity):
-    """Class to manage a generic Philips CoAP humidifier."""
-
-    AVAILABLE_NUMBERS = [PhilipsApi.NEW2_HUMIDITY_TARGET2]  # For humidity control
+class PhilipsNew2GenericCoAPHumidifier(PhilipsNew2GenericCoAPFan):
+    """Class to manage a Philips humidifier with CoAP."""
 
     def __init__(self, hass, entry, config_entry_data):
-        """Initialize the PhilipsNew2GenericCoAPHumidifier."""
         super().__init__(hass, entry, config_entry_data)
 
-        # Define humidifier-specific modes and attributes
-        self._attr_humidifier_modes = list(self.AVAILABLE_PRESET_MODES.keys())
-        self._humidity_min = 30  # Minimum target humidity (from const.py)
-        self._humidity_max = 70  # Maximum target humidity
-        self._humidity_step = 5  # Step size for humidity adjustment
+        self._attr_supported_features = (
+            HumidifierEntityFeature.MODES | HumidifierEntityFeature.TARGET_HUMIDITY
+        )
+        self._attr_humidifier_modes = ["auto", "high", "medium", "sleep"]
+        self._attr_target_humidity = self._device_status.get(PhilipsApi.NEW2_HUMIDITY_TARGET2, 50)
+        self._attr_min_humidity = 30
+        self._attr_max_humidity = 70
 
     @property
-    def is_on(self) -> bool:
+    def is_on(self):
         """Return if the humidifier is on."""
         return self._device_status.get(PhilipsApi.NEW2_POWER) == 1
 
     @property
-    def target_humidity(self) -> int | None:
+    def target_humidity(self):
         """Return the target humidity level."""
-        return self._device_status.get(PhilipsApi.NEW2_HUMIDITY_TARGET2)
+        return self._device_status.get(PhilipsApi.NEW2_HUMIDITY_TARGET2, 50)
 
-    async def async_set_humidity(self, humidity: int) -> None:
+    async def async_set_humidity(self, humidity: int):
         """Set the target humidity."""
-        if humidity < self._humidity_min or humidity > self._humidity_max:
-            raise ValueError(f"Humidity must be between {self._humidity_min} and {self._humidity_max}")
-        if (humidity - self._humidity_min) % self._humidity_step != 0:
-            raise ValueError(f"Humidity must be set in steps of {self._humidity_step}")
-
-        # Send command to set the humidity level
-        await self.coordinator.client.set_control_value(PhilipsApi.NEW2_HUMIDITY_TARGET2, humidity)
+        if humidity < self._attr_min_humidity or humidity > self._attr_max_humidity:
+            raise ValueError("Humidity out of range")
+        await self.coordinator.client.set_control_value(
+            PhilipsApi.NEW2_HUMIDITY_TARGET2, humidity
+        )
         self._device_status[PhilipsApi.NEW2_HUMIDITY_TARGET2] = humidity
         self._handle_coordinator_update()
 
     @property
-    def mode(self) -> str | None:
-        """Return the current mode of the humidifier."""
-        return self.preset_mode  # Reuse preset mode logic
+    def mode(self):
+        """Return the current mode."""
+        mode_mapping = {
+            0: "auto",
+            65: "high",
+            19: "medium",
+            17: "sleep",
+        }
+        mode_value = self._device_status.get(PhilipsApi.NEW2_MODE_B, 0)
+        return mode_mapping.get(mode_value, "auto")
 
-    async def async_set_mode(self, mode: str) -> None:
+    async def async_set_mode(self, mode: str):
+        """Set the humidifier mode."""
+        mode_mapping = {
+            "auto": 0,
+            "high": 65,
+            "medium": 19,
+            "sleep": 17,
+        }
+        if mode not in mode_mapping:
+            raise ValueError(f"Invalid mode: {mode}")
+        await self.coordinator.client.set_control_value(
+            PhilipsApi.NEW2_MODE_B, mode_mapping[mode]
+        )
+        self._device_status[PhilipsApi.NEW2_MODE_B] = mode_mapping[mode]
+        self._handle_coordinator_update()
+
         """Set the humidifier mode."""
         if mode not in self._attr_humidifier_modes:
             raise ValueError(f"Invalid mode: {mode}")
