@@ -531,13 +531,6 @@ class PhilipsNew2GenericCoAPFan(PhilipsGenericCoAPFanBase):
     STATE_POWER_OFF = 0
 
 
-class PhilipsHumidifierMixin(PhilipsGenericCoAPFanBase):
-    """Mixin for humidifiers."""
-
-    AVAILABLE_SELECTS = [PhilipsApi.FUNCTION, PhilipsApi.HUMIDITY_TARGET]
-    AVAILABLE_BINARY_SENSORS = [PhilipsApi.ERROR_CODE]
-
-
 # similar to the AC1715, the AC0850 seems to be a new class of devices that
 # follows some patterns of its own
 
@@ -790,10 +783,7 @@ class PhilipsAC1214(PhilipsGenericCoAPFan):
             return
 
 
-class PhilipsAC2729(
-    PhilipsHumidifierMixin,
-    PhilipsGenericCoAPFan,
-):
+class PhilipsAC2729(PhilipsGenericCoAPFan):
     """AC2729."""
 
     AVAILABLE_PRESET_MODES = {
@@ -855,6 +845,8 @@ class PhilipsAC2729(
     }
     AVAILABLE_SWITCHES = [PhilipsApi.CHILD_LOCK]
     AVAILABLE_SELECTS = [PhilipsApi.PREFERRED_INDEX]
+    AVAILABLE_HUMIDIFIERS = [PhilipsApi.HUMIDITY_TARGET]
+    AVAILABLE_BINARY_SENSORS = [PhilipsApi.ERROR_CODE]
 
 
 class PhilipsAC2889(PhilipsGenericCoAPFan):
@@ -1269,14 +1261,15 @@ class PhilipsAC3737(PhilipsNew2GenericCoAPFan):
         },
     }
 
-    AVAILABLE_SELECTS = [PhilipsApi.NEW2_HUMIDITY_TARGET]
+    # AVAILABLE_SELECTS = [PhilipsApi.NEW2_HUMIDITY_TARGET]
     AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT2]
     AVAILABLE_SWITCHES = [PhilipsApi.NEW2_CHILD_LOCK]
     UNAVAILABLE_SENSORS = [PhilipsApi.NEW2_FAN_SPEED]
     AVAILABLE_BINARY_SENSORS = [PhilipsApi.NEW2_ERROR_CODE, PhilipsApi.NEW2_MODE_A]
+    AVAILABLE_HUMIDIFIERS = [PhilipsApi.NEW2_HUMIDITY_TARGET]
 
 
-class PhilipsAC3829(PhilipsHumidifierMixin, PhilipsGenericCoAPFan):
+class PhilipsAC3829(PhilipsGenericCoAPFan):
     """AC3829."""
 
     AVAILABLE_PRESET_MODES = {
@@ -1338,6 +1331,8 @@ class PhilipsAC3829(PhilipsHumidifierMixin, PhilipsGenericCoAPFan):
     }
     AVAILABLE_SWITCHES = [PhilipsApi.CHILD_LOCK]
     AVAILABLE_SELECTS = [PhilipsApi.GAS_PREFERRED_INDEX]
+    AVAILABLE_BINARY_SENSORS = [PhilipsApi.ERROR_CODE]
+    AVAILABLE_HUMIDIFIERS = [PhilipsApi.HUMIDITY_TARGET]
 
 
 class PhilipsAC3836(PhilipsGenericCoAPFan):
@@ -1943,8 +1938,9 @@ class PhilipsHU5710(PhilipsNew2GenericCoAPFan):
         PhilipsApi.NEW2_LAMP_MODE2,
         PhilipsApi.NEW2_AMBIENT_LIGHT_MODE,
     ]
-    AVAILABLE_NUMBERS = [PhilipsApi.NEW2_HUMIDITY_TARGET2]
+    # AVAILABLE_NUMBERS = [PhilipsApi.NEW2_HUMIDITY_TARGET2]
     AVAILABLE_BINARY_SENSORS = [PhilipsApi.NEW2_ERROR_CODE]
+    AVAILABLE_HUMIDIFIERS = [PhilipsApi.NEW2_HUMIDITY_TARGET2]
 
 
 model_to_class = {

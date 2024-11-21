@@ -25,6 +25,7 @@ from homeassistant.helpers.entity import EntityCategory
 
 from .model import (
     FilterDescription,
+    HumidifierDescription,
     LightDescription,
     NumberDescription,
     SelectDescription,
@@ -254,8 +255,13 @@ class FanAttributes(StrEnum):
     FILTER_NANOPROTECT_CLEAN = "pre_filter"
     FUNCTION = "function"
     HUMIDITY = "humidity"
-    HUMIDIFIER = "humidification"
+    HUMIDIFICATION = "humidification"
+    HUMIDIFIER = "humidifier"
+    HUMIDIFYING = "humidifying"
     HUMIDITY_TARGET = "humidity_target"
+    MAX_HUMIDITY = "max_humidity"
+    MIN_HUMIDITY = "min_humidity"
+    IDLE = "idle"
     INDOOR_ALLERGEN_INDEX = "indoor_allergen_index"
     LABEL = "label"
     LAMP_MODE = "lamp_mode"
@@ -288,7 +294,10 @@ class FanAttributes(StrEnum):
     TURBO = "turbo"
     OSCILLATION = "oscillation"
     VALUE_LIST = "value_list"
+    ON = "on"
     OFF = "off"
+    POWER = "power"
+    SWITCH = "switch"
     MIN = "min"
     MAX = "max"
     STEP = "step"
@@ -415,6 +424,7 @@ class PhilipsApi:
     NEW2_ERROR_CODE = "D03240"
     NEW2_HUMIDITY_TARGET = "D03128#1"
     NEW2_HUMIDITY_TARGET2 = "D03128#2"
+    NEW2_HUMIDIFYING = "D0312B"
     NEW2_FILTER_NANOPROTECT_PREFILTER = "D0520D"
     NEW2_FILTER_NANOPROTECT = "D0540E"
     NEW2_FILTER_NANOPROTECT_PREFILTER_TOTAL = "D05207"
@@ -511,12 +521,12 @@ class PhilipsApi:
         12: ("11h", "mdi:clock-time-eleven"),
         13: ("12h", "mdi:clock-time-twelve"),
     }
-    HUMIDITY_TARGET_MAP = {
-        40: ("40%", ICON.HUMIDITY_BUTTON),
-        50: ("50%", ICON.HUMIDITY_BUTTON),
-        60: ("60%", ICON.HUMIDITY_BUTTON),
-        70: ("max", ICON.HUMIDITY_BUTTON),
-    }
+    # HUMIDITY_TARGET_MAP = {
+    #     40: ("40%", ICON.HUMIDITY_BUTTON),
+    #     50: ("50%", ICON.HUMIDITY_BUTTON),
+    #     60: ("60%", ICON.HUMIDITY_BUTTON),
+    #     70: ("max", ICON.HUMIDITY_BUTTON),
+    # }
 
 
 SENSOR_TYPES: dict[str, SensorDescription] = {
@@ -703,7 +713,7 @@ BINARY_SENSOR_TYPES: dict[str, SensorDescription] = {
             True: PhilipsApi.FUNCTION_MAP["PH"][1],
             False: PhilipsApi.FUNCTION_MAP["P"][1],
         },
-        FanAttributes.LABEL: FanAttributes.HUMIDIFIER,
+        FanAttributes.LABEL: FanAttributes.HUMIDIFICATION,
         FanAttributes.VALUE: lambda value: value == "PH",
     },
     PhilipsApi.NEW2_MODE_A: {
@@ -712,7 +722,7 @@ BINARY_SENSOR_TYPES: dict[str, SensorDescription] = {
             True: PhilipsApi.FUNCTION_MAP["PH"][1],
             False: PhilipsApi.FUNCTION_MAP["P"][1],
         },
-        FanAttributes.LABEL: FanAttributes.HUMIDIFIER,
+        FanAttributes.LABEL: FanAttributes.HUMIDIFICATION,
         FanAttributes.VALUE: lambda value: value == 4,
     },
 }
@@ -894,16 +904,16 @@ SELECT_TYPES: dict[str, SelectDescription] = {
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         OPTIONS: PhilipsApi.FUNCTION_MAP,
     },
-    PhilipsApi.HUMIDITY_TARGET: {
-        FanAttributes.LABEL: FanAttributes.HUMIDITY_TARGET,
-        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
-        OPTIONS: PhilipsApi.HUMIDITY_TARGET_MAP,
-    },
-    PhilipsApi.NEW2_HUMIDITY_TARGET: {
-        FanAttributes.LABEL: FanAttributes.HUMIDITY_TARGET,
-        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
-        OPTIONS: PhilipsApi.HUMIDITY_TARGET_MAP,
-    },
+    # PhilipsApi.HUMIDITY_TARGET: {
+    #     FanAttributes.LABEL: FanAttributes.HUMIDITY_TARGET,
+    #     CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+    #     OPTIONS: PhilipsApi.HUMIDITY_TARGET_MAP,
+    # },
+    # PhilipsApi.NEW2_HUMIDITY_TARGET: {
+    #     FanAttributes.LABEL: FanAttributes.HUMIDITY_TARGET,
+    #     CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+    #     OPTIONS: PhilipsApi.HUMIDITY_TARGET_MAP,
+    # },
     PhilipsApi.NEW2_LAMP_MODE: {
         FanAttributes.LABEL: FanAttributes.LAMP_MODE,
         CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
@@ -988,14 +998,62 @@ NUMBER_TYPES: dict[str, NumberDescription] = {
         FanAttributes.MAX: 37,
         FanAttributes.STEP: 1,
     },
+    # PhilipsApi.NEW2_HUMIDITY_TARGET2: {
+    #     FanAttributes.LABEL: FanAttributes.HUMIDITY_TARGET,
+    #     ATTR_ICON: "mdi:water-percent",
+    #     CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
+    #     FanAttributes.UNIT: PERCENTAGE,
+    #     FanAttributes.OFF: 30,
+    #     FanAttributes.MIN: 30,
+    #     FanAttributes.MAX: 70,
+    #     FanAttributes.STEP: 5,
+    # },
+}
+
+HUMIDIFIER_TYPES: dict[str, HumidifierDescription] = {
+    PhilipsApi.HUMIDITY_TARGET: {
+        ATTR_ICON: ICON.HUMIDITY_BUTTON,
+        FanAttributes.LABEL: FanAttributes.HUMIDIFIER,
+        FanAttributes.HUMIDITY: PhilipsApi.HUMIDITY,
+        FanAttributes.POWER: PhilipsApi.POWER,
+        FanAttributes.ON: PhilipsApi.POWER_MAP[SWITCH_ON],
+        FanAttributes.OFF: PhilipsApi.POWER_MAP[SWITCH_OFF],
+        FanAttributes.FUNCTION: PhilipsApi.FUNCTION,
+        FanAttributes.HUMIDIFYING: "PH",
+        FanAttributes.IDLE: "P",
+        FanAttributes.SWITCH: True,
+        FanAttributes.MAX_HUMIDITY: 70,
+        FanAttributes.MIN_HUMIDITY: 40,
+        FanAttributes.STEP: 10,
+    },
+    PhilipsApi.NEW2_HUMIDITY_TARGET: {
+        ATTR_ICON: ICON.HUMIDITY_BUTTON,
+        FanAttributes.LABEL: FanAttributes.HUMIDIFIER,
+        FanAttributes.HUMIDITY: PhilipsApi.NEW2_HUMIDITY,
+        FanAttributes.POWER: PhilipsApi.NEW2_POWER,
+        FanAttributes.ON: 1,
+        FanAttributes.OFF: 0,
+        FanAttributes.FUNCTION: PhilipsApi.NEW2_HUMIDIFYING,
+        FanAttributes.HUMIDIFYING: 6,
+        FanAttributes.IDLE: 1,
+        FanAttributes.SWITCH: False,
+        FanAttributes.MAX_HUMIDITY: 70,
+        FanAttributes.MIN_HUMIDITY: 40,
+        FanAttributes.STEP: 10,
+    },
     PhilipsApi.NEW2_HUMIDITY_TARGET2: {
-        FanAttributes.LABEL: FanAttributes.HUMIDITY_TARGET,
-        ATTR_ICON: "mdi:water-percent",
-        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
-        FanAttributes.UNIT: PERCENTAGE,
-        FanAttributes.OFF: 30,
-        FanAttributes.MIN: 30,
-        FanAttributes.MAX: 70,
+        ATTR_ICON: ICON.HUMIDITY_BUTTON,
+        FanAttributes.LABEL: FanAttributes.HUMIDIFIER,
+        FanAttributes.HUMIDITY: PhilipsApi.NEW2_HUMIDITY,
+        FanAttributes.POWER: PhilipsApi.NEW2_POWER,
+        FanAttributes.ON: 1,
+        FanAttributes.OFF: 0,
+        FanAttributes.FUNCTION: PhilipsApi.NEW2_POWER,
+        FanAttributes.HUMIDIFYING: 1,
+        FanAttributes.IDLE: 0,
+        FanAttributes.SWITCH: False,
+        FanAttributes.MAX_HUMIDITY: 70,
+        FanAttributes.MIN_HUMIDITY: 30,
         FanAttributes.STEP: 5,
     },
 }
