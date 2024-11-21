@@ -11,7 +11,7 @@
 [community_forum_shield]: https://img.shields.io/static/v1.svg?label=%20&message=Forum&style=popout&color=41bdf5&logo=HomeAssistant&logoColor=white
 [community_forum]: https://community.home-assistant.io/t/philips-air-purifier/53030
 
-This is a `Local Push` integration for Philips airpurifiers.
+This is a `Local Push` integration for Philips airpurifiers and humidifiers.
 Currently only encrypted-CoAP is implemented.
 
 
@@ -85,6 +85,7 @@ Note: Some of these models seem to have a newer firmware that does not allow loc
 - AC3210
 - AC3220
 - AC3221
+- AC3420
 - AC3421
 - AC3259
 - AC3737

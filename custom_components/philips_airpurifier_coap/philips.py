@@ -1212,10 +1212,15 @@ class PhilipsAC3259(PhilipsGenericCoAPFan):
     AVAILABLE_SELECTS = [PhilipsApi.GAS_PREFERRED_INDEX]
 
 
-class PhilipsAC3421(PhilipsAC0950):
-    """AC3421."""
+class PhilipsAC3420(PhilipsAC0950):
+    """AC3420."""
 
     AVAILABLE_SELECTS = [PhilipsApi.NEW2_LAMP_MODE]
+    AVAILABLE_HUMIDIFIERS = [PhilipsApi.NEW2_HUMIDITY_TARGET]
+
+
+class PhilipsAC3421(PhilipsAC3420):
+    """AC3421."""
 
 
 class PhilipsAC3737(PhilipsNew2GenericCoAPFan):
