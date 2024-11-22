@@ -41,4 +41,5 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add ./custom_components/philips_airpurifier_coap/manifest.json
           git commit -m "Update manifest.json to version ${{ env.release_version }}"
-          git push
+          branch=$(echo $GITHUB_REF | sed 's/refs\/tags\/\(.*\)/\1/')
+          git push origin HEAD:$branch
