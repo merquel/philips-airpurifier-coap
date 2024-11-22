@@ -1974,6 +1974,7 @@ model_to_class = {
     FanModel.AC3220: PhilipsAC3220,
     FanModel.AC3221: PhilipsAC3221,
     FanModel.AC3259: PhilipsAC3259,
+    FanModel.AC3420: PhilipsAC3420,
     FanModel.AC3421: PhilipsAC3421,
     FanModel.AC3737: PhilipsAC3737,
     FanModel.AC3829: PhilipsAC3829,
