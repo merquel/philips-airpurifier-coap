@@ -120,6 +120,12 @@ class PhilipsHumidifier(PhilipsEntity, HumidifierEntity):
     @property
     def is_on(self) -> bool | None:
         """Return the humidifying state. True if humidifying, False if off or fan mode."""
+        if (
+            self._device_status.get(self._power_key)
+            == self._description[FanAttributes.OFF]
+        ):
+            return False
+
         if self.action == HumidifierAction.HUMIDIFYING:
             return True
 
