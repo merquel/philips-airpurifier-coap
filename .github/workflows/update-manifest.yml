@@ -15,6 +15,8 @@ jobs:
       # Checkout the repository
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
 
       # Extract the release version from the tag name
       - name: Get Release Version
