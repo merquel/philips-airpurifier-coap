@@ -148,6 +148,11 @@ class PhilipsAirPurifierConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             _LOGGER.info("Model family %s supported", model_family)
             self._model = model_family
         else:
+            _LOGGER.warning(
+                "Model %s of family %s not supported in DHCP discovery",
+                model,
+                model_family,
+            )
             return self.async_abort(reason="model_unsupported")
 
         # use the device ID as unique_id
@@ -314,6 +319,11 @@ class PhilipsAirPurifierConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     _LOGGER.info("Model family %s supported", model_family)
                     config_entry_data[CONF_MODEL] = model_family
                 else:
+                    _LOGGER.warning(
+                        "Model %s of family %s not supported in user discovery",
+                        model,
+                        model_family,
+                    )
                     return self.async_abort(reason="model_unsupported")
 
                 # use the device ID as unique_id

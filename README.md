@@ -11,7 +11,7 @@
 [community_forum_shield]: https://img.shields.io/static/v1.svg?label=%20&message=Forum&style=popout&color=41bdf5&logo=HomeAssistant&logoColor=white
 [community_forum]: https://community.home-assistant.io/t/philips-air-purifier/53030
 
-This is a `Local Push` integration for Philips airpurifiers.
+This is a `Local Push` integration for Philips airpurifiers and humidifiers.
 Currently only encrypted-CoAP is implemented.
 
 
@@ -85,6 +85,7 @@ Note: Some of these models seem to have a newer firmware that does not allow loc
 - AC3210
 - AC3220
 - AC3221
+- AC3420
 - AC3421
 - AC3259
 - AC3737
@@ -167,9 +168,11 @@ logs should now be available in `home-assistant.log`
 
 ### Entities
 
-The integration provides `fan` entities for your devices which are [documented here](https://www.home-assistant.io/integrations/fan/).
+The integration provides `fan` entities for your devices which are [documented here](https://www.home-assistant.io/integrations/fan/). In addition, if your device is a humidifier or a 2-in-1 device, the integration will also provide a `humidifier` entity which is [documented here](https://www.home-assistant.io/integrations/humidifier/). The two entities work together, i.e. the `fan` controls power and settings for the fan operation while the `humidifier` adds extra capabilities.
 
-It also provides a number of `sensor` entities for the air quality and other data measured by the device, as well as some diagnostic `sensor` entities with information about the filter or water fill level for humidifiers. A `switch` entity allows you to control the child lock function, should your device have one. Finally, there are some `light` entities to control the display backlight and the brightness of the air quality display and some `select` entities to set the humidification function on the devices that have that.
+It also provides a number of `sensor` entities for the air quality and other data measured by the device, as well as some diagnostic `sensor` entities with information about the filter or water fill level for humidifiers. A `switch` entity allows you to control the child lock function, should your device have one, or a set of other capabilities depending on your model. Finally, there are some `light` entities to control the display backlight and the brightness of the air quality display and some `select` entities to set other functions like timers. Few devices also have `number` entities to set certain values.
+
+The goal is, to offer all existing functionality that is also available both, on the device itself but also in the official app.
 
 
 ### Services
