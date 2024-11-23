@@ -1912,6 +1912,38 @@ class PhilipsCX3550(PhilipsNew2GenericCoAPFan):
     AVAILABLE_SELECTS = [PhilipsApi.NEW2_TIMER2]
 
 
+class PhilipsHU1510(PhilipsNew2GenericCoAPFan):
+    """HU1510."""
+
+    AVAILABLE_PRESET_MODES = {
+        PresetMode.AUTO: {
+            PhilipsApi.NEW2_POWER: 1,
+            PhilipsApi.NEW2_MODE_B: 0,
+        },
+        PresetMode.HIGH: {PhilipsApi.NEW2_POWER: 1, PhilipsApi.NEW2_MODE_B: 65},
+        PresetMode.MEDIUM: {PhilipsApi.NEW2_POWER: 1, PhilipsApi.NEW2_MODE_B: 19},
+        PresetMode.SLEEP: {PhilipsApi.NEW2_POWER: 1, PhilipsApi.NEW2_MODE_B: 17},
+    }
+    AVAILABLE_SPEEDS = {
+        PresetMode.SLEEP: {PhilipsApi.NEW2_POWER: 1, PhilipsApi.NEW2_MODE_B: 17},
+        PresetMode.MEDIUM: {PhilipsApi.NEW2_POWER: 1, PhilipsApi.NEW2_MODE_B: 19},
+        PresetMode.HIGH: {PhilipsApi.NEW2_POWER: 1, PhilipsApi.NEW2_MODE_B: 65},
+    }
+
+    AVAILABLE_SWITCHES = [
+        PhilipsApi.NEW2_BEEP,
+        PhilipsApi.NEW2_STANDBY_SENSORS,
+    ]
+    AVAILABLE_LIGHTS = [PhilipsApi.NEW2_DISPLAY_BACKLIGHT4]
+    AVAILABLE_SELECTS = [
+        PhilipsApi.NEW2_TIMER2,
+        PhilipsApi.NEW2_LAMP_MODE2,
+        PhilipsApi.NEW2_AMBIENT_LIGHT_MODE,
+    ]
+    AVAILABLE_BINARY_SENSORS = [PhilipsApi.NEW2_ERROR_CODE]
+    AVAILABLE_HUMIDIFIERS = [PhilipsApi.NEW2_HUMIDITY_TARGET2]
+
+
 class PhilipsHU5710(PhilipsNew2GenericCoAPFan):
     """HU5710."""
 
@@ -1996,5 +2028,6 @@ model_to_class = {
     FanModel.AMF870: PhilipsAMF870,
     FanModel.CX5120: PhilipsCX5120,
     FanModel.CX3550: PhilipsCX3550,
+    FanModel.HU1510: PhilipsHU1510,
     FanModel.HU5710: PhilipsHU5710,
 }
