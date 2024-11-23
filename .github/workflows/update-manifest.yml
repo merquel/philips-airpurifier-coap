@@ -23,10 +23,6 @@ jobs:
         id: get_version
         run: echo "release_version=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
-      # Debug: List files in the repository
-      - name: List Repository Files
-        run: ls -R
-
       # Update the manifest.json file with the release version
       - name: Update manifest.json
         run: |
@@ -46,3 +42,16 @@ jobs:
           git push origin :refs/tags/${{ github.ref_name }}
           git tag -fa ${{ github.ref_name }} -m "Update to version ${{ github.ref_name }}"
           git push origin ${{ github.ref_name }}
+
+      # Update the release
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: ${{ github.ref_name }}
+          draft: false
+          prerelease: ${{ github.event.release.prerelease }}
+
