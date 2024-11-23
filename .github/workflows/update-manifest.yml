@@ -23,10 +23,6 @@ jobs:
         id: get_version
         run: echo "release_version=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
-      # Debug: List files in the repository
-      - name: List Repository Files
-        run: ls -R
-
       # Update the manifest.json file with the release version
       - name: Update manifest.json
         run: |
@@ -46,3 +42,30 @@ jobs:
           git push origin :refs/tags/${{ github.ref_name }}
           git tag -fa ${{ github.ref_name }} -m "Update to version ${{ github.ref_name }}"
           git push origin ${{ github.ref_name }}
+
+      # Update the release
+      - name: Publish Draft Release
+        id: publish_release
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const { data: releases } = await github.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            });
+          
+            const draftRelease = releases.find(release => release.draft && release.tag_name === process.env.GITHUB_REF_NAME);
+          
+            if (draftRelease) {
+              await github.repos.updateRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                release_id: draftRelease.id,
+                draft: false
+              });
+            } else {
+              core.setFailed('No draft release found');
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
