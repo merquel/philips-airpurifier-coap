@@ -1912,8 +1912,8 @@ class PhilipsCX3550(PhilipsNew2GenericCoAPFan):
     AVAILABLE_SELECTS = [PhilipsApi.NEW2_TIMER2]
 
 
-class PhilipsHU1510(PhilipsNew2GenericCoAPFan):
-    """HU1510."""
+class PhilipsHU1509(PhilipsNew2GenericCoAPFan):
+    """HU1509."""
 
     AVAILABLE_PRESET_MODES = {
         PresetMode.AUTO: {
@@ -1942,6 +1942,10 @@ class PhilipsHU1510(PhilipsNew2GenericCoAPFan):
     ]
     AVAILABLE_BINARY_SENSORS = [PhilipsApi.NEW2_ERROR_CODE]
     AVAILABLE_HUMIDIFIERS = [PhilipsApi.NEW2_HUMIDITY_TARGET2]
+
+
+class PhilipsHU1510(PhilipsHU1509):
+    """HU1510."""
 
 
 class PhilipsHU5710(PhilipsNew2GenericCoAPFan):
@@ -2028,6 +2032,7 @@ model_to_class = {
     FanModel.AMF870: PhilipsAMF870,
     FanModel.CX5120: PhilipsCX5120,
     FanModel.CX3550: PhilipsCX3550,
+    FanModel.HU1509: PhilipsHU1510,
     FanModel.HU1510: PhilipsHU1510,
     FanModel.HU5710: PhilipsHU5710,
 }
