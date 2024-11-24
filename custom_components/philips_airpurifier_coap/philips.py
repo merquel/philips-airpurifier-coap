@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import asyncio
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from datetime import timedelta
 import logging
 from typing import Any
@@ -154,7 +154,7 @@ class PhilipsGenericControlBase(PhilipsEntity):
         self._preset_modes = list(self._available_preset_modes.keys())
 
     @property
-    def extra_state_attributes(self) -> dict[str, Any] | None:
+    def extra_state_attributes(self) -> Mapping[str, Any] | None:
         """Return the extra state attributes."""
 
         def append(
@@ -425,9 +425,6 @@ class PhilipsGenericFanBase(PhilipsGenericControlBase, FanEntity):
 class PhilipsGenericFan(PhilipsGenericFanBase):
     """Class to manage a generic Philips fan."""
 
-    AVAILABLE_PRESET_MODES = {}
-    AVAILABLE_SPEEDS = {}
-
     AVAILABLE_ATTRIBUTES = [
         # device information
         (FanAttributes.NAME, PhilipsApi.NAME),
@@ -463,9 +460,6 @@ class PhilipsGenericFan(PhilipsGenericFanBase):
 class PhilipsNewGenericFan(PhilipsGenericFanBase):
     """Class to manage a new generic fan."""
 
-    AVAILABLE_PRESET_MODES = {}
-    AVAILABLE_SPEEDS = {}
-
     AVAILABLE_ATTRIBUTES = [
         # device information
         (FanAttributes.NAME, PhilipsApi.NEW_NAME),
@@ -500,9 +494,6 @@ class PhilipsNewGenericFan(PhilipsGenericFanBase):
 
 class PhilipsNew2GenericFan(PhilipsGenericFanBase):
     """Class to manage another new generic fan."""
-
-    AVAILABLE_PRESET_MODES = {}
-    AVAILABLE_SPEEDS = {}
 
     AVAILABLE_ATTRIBUTES = [
         # device information
