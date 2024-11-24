@@ -126,10 +126,11 @@ class PhilipsAirPurifierConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         )[0]
         self._device_id = status[PhilipsApi.DEVICE_ID]
         _LOGGER.debug(
-            "Detected host %s as model %s with name: %s",
+            "Detected host %s as model %s with name: %s and firmware %s",
             self._host,
             self._model,
             self._name,
+            self._wifi_version,
         )
         self._status = status
 
@@ -298,10 +299,11 @@ class PhilipsAirPurifierConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 config_entry_data[CONF_STATUS] = status
 
                 _LOGGER.debug(
-                    "Detected host %s as model %s with name: %s",
+                    "Detected host %s as model %s with name: %s and firmware: %s",
                     self._host,
                     self._model,
                     self._name,
+                    self._wifi_version,
                 )
 
                 # check if model is supported
