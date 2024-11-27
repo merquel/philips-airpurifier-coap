@@ -118,7 +118,7 @@ class PhilipsHumidifier(PhilipsGenericControlBase, HumidifierEntity):
         # pure humidification devices are identified by the function being the power and have the fan modes as modes
         elif self._function_key == self._power_key:
             self._attr_supported_features = HumidifierEntityFeature.MODES
-            self._attr_available_modes = self._available_preset_modes.keys()
+            self._attr_available_modes = self._available_preset_modes
 
     @property
     def action(self) -> str:
