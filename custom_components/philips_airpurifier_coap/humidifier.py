@@ -221,7 +221,7 @@ class PhilipsHumidifier(PhilipsGenericControlBase, HumidifierEntity):
                 self._power_key: self._description[FanAttributes.OFF],
             }
         )
-        self._device_status[self._power_key] = self._description[FanAttributes.ON]
+        self._device_status[self._power_key] = self._description[FanAttributes.OFF]
         self._handle_coordinator_update()
 
     async def async_set_humidity(self, humidity: str) -> None:
