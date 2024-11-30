@@ -225,18 +225,6 @@ class FanFunction(StrEnum):
     CIRCULATION = "circulation"
 
 
-class FanService(StrEnum):
-    """The service of the fan."""
-
-    CHILD_LOCK_OFF = "set_child_lock_off"
-    CHILD_LOCK_ON = "set_child_lock_on"
-    DISPLAY_BACKLIGHT_OFF = "set_display_backlight_off"
-    DISPLAY_BACKLIGHT_ON = "set_display_backlight_on"
-    FUNCTION = "set_function"
-    HUMIDITY_TARGET = "set_humidity_target"
-    LIGHT_BRIGHTNESS = "set_light_brightness"
-
-
 class FanAttributes(StrEnum):
     """The attributes of a fan."""
 
