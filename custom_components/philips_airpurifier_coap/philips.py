@@ -110,6 +110,8 @@ class PhilipsGenericControlBase(PhilipsEntity):
     AVAILABLE_PRESET_MODES = {}
     REPLACE_PRESET = None
 
+    _attr_name = None
+
     def __init__(
         self,
         hass: HomeAssistant,
