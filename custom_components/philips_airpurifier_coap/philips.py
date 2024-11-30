@@ -30,12 +30,16 @@ from .const import (
     PhilipsApi,
     PresetMode,
 )
+from .helpers import extract_model
 
 _LOGGER = logging.getLogger(__name__)
 
 
 class PhilipsEntity(Entity):
     """Class to represent a generic Philips entity."""
+
+    _attr_has_entity_name = True
+    _attr_name = None
 
     def __init__(
         self,
@@ -51,20 +55,14 @@ class PhilipsEntity(Entity):
         self.config_entry = entry
         self.config_entry_data = config_entry_data
         self.coordinator = self.config_entry_data.coordinator
+
         name = self.config_entry_data.device_information.name
+        model = extract_model(self._device_status)
 
         self._attr_device_info = DeviceInfo(
             name=name,
             manufacturer=MANUFACTURER,
-            model=next(
-                self._device_status.get(key)
-                for key in [
-                    PhilipsApi.MODEL_ID,
-                    PhilipsApi.NEW_MODEL_ID,
-                    PhilipsApi.NEW2_MODEL_ID,
-                ]
-                if self._device_status.get(key)
-            ),
+            model=model,
             sw_version=self._device_status[PhilipsApi.WIFI_VERSION],
             serial_number=self._device_status[PhilipsApi.DEVICE_ID],
             identifiers={(DOMAIN, self._device_status[PhilipsApi.DEVICE_ID])},
@@ -209,18 +207,18 @@ class PhilipsGenericFanBase(PhilipsGenericControlBase, FanEntity):
 
         super().__init__(hass, entry, config_entry_data)
 
-        self._attr_name = next(
-            name
-            for name in (
-                self._device_status.get(key)
-                for key in [
-                    PhilipsApi.NAME,
-                    PhilipsApi.NEW_NAME,
-                    PhilipsApi.NEW2_NAME,
-                ]
-            )
-            if name
-        )
+        # self._attr_name = next(
+        #     name
+        #     for name in (
+        #         self._device_status.get(key)
+        #         for key in [
+        #             PhilipsApi.NAME,
+        #             PhilipsApi.NEW_NAME,
+        #             PhilipsApi.NEW2_NAME,
+        #         ]
+        #     )
+        #     if name
+        # )
         model = config_entry_data.device_information.model
         device_id = config_entry_data.device_information.device_id
         self._attr_unique_id = f"{model}-{device_id}"

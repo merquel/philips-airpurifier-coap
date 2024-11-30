@@ -63,7 +63,6 @@ class PhilipsBinarySensor(PhilipsEntity, BinarySensorEntity):
         super().__init__(hass, config, config_entry_data)
 
         self._model = config_entry_data.device_information.model
-        name = config_entry_data.device_information.name
 
         self._description = BINARY_SENSOR_TYPES[kind]
         self._icon_map = self._description.get(FanAttributes.ICON_MAP)
@@ -75,7 +74,7 @@ class PhilipsBinarySensor(PhilipsEntity, BinarySensorEntity):
         self._attr_device_class = self._description.get(ATTR_DEVICE_CLASS)
         self._attr_entity_category = self._description.get(CONF_ENTITY_CATEGORY)
         self._attr_name = (
-            f"{name} {self._description[FanAttributes.LABEL].replace('_', ' ').title()}"
+            f"{self._description[FanAttributes.LABEL].replace('_', ' ').title()}"
         )
 
         model = config_entry_data.device_information.model

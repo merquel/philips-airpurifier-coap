@@ -81,14 +81,10 @@ class PhilipsHumidifier(PhilipsGenericControlBase, HumidifierEntity):
         super().__init__(hass, config, config_entry_data)
 
         self._model = config_entry_data.device_information.model
-        name = config_entry_data.device_information.name
         latest_status = config_entry_data.latest_status
 
         self._description = HUMIDIFIER_TYPES[humidifier]
         self._attr_device_class = HumidifierDeviceClass.HUMIDIFIER
-        self._attr_name = (
-            f"{name} {self._description[FanAttributes.LABEL].replace('_', ' ').title()}"
-        )
 
         device_id = config_entry_data.device_information.device_id
         self._attr_unique_id = f"{self._model}-{device_id}-{humidifier.lower()}"

@@ -96,7 +96,6 @@ class PhilipsSensor(PhilipsEntity, SensorEntity):
         super().__init__(hass, config, config_entry_data)
 
         self._model = config_entry_data.device_information.model
-        name = config_entry_data.device_information.name
 
         # the sensor could be a normal sensor or an extra sensor
         if kind in SENSOR_TYPES:
@@ -114,7 +113,7 @@ class PhilipsSensor(PhilipsEntity, SensorEntity):
         self._attr_device_class = self._description.get(ATTR_DEVICE_CLASS)
         self._attr_entity_category = self._description.get(CONF_ENTITY_CATEGORY)
         self._attr_name = (
-            f"{name} {self._description[FanAttributes.LABEL].replace('_', ' ').title()}"
+            f"{self._description[FanAttributes.LABEL].replace('_', ' ').title()}"
         )
         self._attr_native_unit_of_measurement = self._description.get(
             FanAttributes.UNIT
@@ -165,7 +164,6 @@ class PhilipsFilterSensor(PhilipsEntity, SensorEntity):
         super().__init__(hass, config, config_entry_data)
 
         self._model = config_entry_data.device_information.model
-        name = config_entry_data.device_information.name
 
         self._description = FILTER_TYPES[kind]
         self._icon_map = self._description[FanAttributes.ICON_MAP]
@@ -176,7 +174,7 @@ class PhilipsFilterSensor(PhilipsEntity, SensorEntity):
         )
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
         self._attr_name = (
-            f"{name} {self._description[FanAttributes.LABEL].replace('_', ' ').title()}"
+            f"{self._description[FanAttributes.LABEL].replace('_', ' ').title()}"
         )
 
         self._value_key = kind
