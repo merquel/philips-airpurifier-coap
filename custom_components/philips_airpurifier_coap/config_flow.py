@@ -52,6 +52,14 @@ class PhilipsAirPurifierConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             {vol.Required(CONF_HOST, default=user_input.get(CONF_HOST, "")): cv.string}
         )
 
+    def _extract_name(self, status: dict) -> str:
+        """Extract the name from the status."""
+        for name_key in [PhilipsApi.NAME, PhilipsApi.NEW_NAME, PhilipsApi.NEW2_NAME]:
+            name = status.get(name_key)
+            if name:
+                return name
+        return ""
+
     async def async_step_dhcp(self, discovery_info: dhcp.DhcpServiceInfo) -> FlowResult:
         """Handle initial step of auto discovery flow."""
         _LOGGER.debug("async_step_dhcp: called, found: %s", discovery_info)
@@ -114,16 +122,7 @@ class PhilipsAirPurifierConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         # autodetect Wifi version
         self._wifi_version = status.get(PhilipsApi.WIFI_VERSION)
 
-        # autodetect name
-        self._name = list(
-            filter(
-                None,
-                map(
-                    status.get,
-                    [PhilipsApi.NAME, PhilipsApi.NEW_NAME, PhilipsApi.NEW2_NAME],
-                ),
-            )
-        )[0]
+        self._name = self._extract_name(status)
         self._device_id = status[PhilipsApi.DEVICE_ID]
         _LOGGER.debug(
             "Detected host %s as model %s with name: %s and firmware %s",
@@ -277,20 +276,7 @@ class PhilipsAirPurifierConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 # autodetect Wifi version
                 self._wifi_version = status.get(PhilipsApi.WIFI_VERSION)
 
-                # autodetect name
-                self._name = list(
-                    filter(
-                        None,
-                        map(
-                            status.get,
-                            [
-                                PhilipsApi.NAME,
-                                PhilipsApi.NEW_NAME,
-                                PhilipsApi.NEW2_NAME,
-                            ],
-                        ),
-                    )
-                )[0]
+                self._name = self._extract_name(status)
                 self._device_id = status[PhilipsApi.DEVICE_ID]
                 config_entry_data[CONF_MODEL] = self._model
                 config_entry_data[CONF_NAME] = self._name
