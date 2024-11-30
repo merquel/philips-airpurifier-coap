@@ -113,19 +113,48 @@
     },
     "select": {
       "function": {
-        "name": "Function"
+        "name": "Function",
+        "state": {
+          "purification": "Purification",
+          "purification_humidification": "Purification and humidification",
+          "fan": "Fan",
+          "circulation": "Circulation",
+          "heating": "Heating"
+        }
       },
       "lamp_mode": {
-        "name": "Lamp mode"
+        "name": "Lamp mode",
+        "state": {
+          "off": "Off",
+          "air_quality": "Air quality",
+          "ambient_light_mode": "Ambient",
+          "humidity": "Humidity"
+        }
       },
       "ambient_light_mode": {
-        "name": "Ambient light mode"
+        "name": "Ambient light mode",
+        "state": {
+          "off": "Off",
+          "warm": "Warm",
+          "dawn": "Dawn",
+          "calm": "Calm",
+          "breath": "Breath"
+        }
       },
       "preferred_index": {
-        "name": "Preferred index"
+        "name": "Preferred index",
+        "state": {
+          "indoor_allergen_index": "Indoor allergen index",
+          "pm25": "PM2.5",
+          "gas": "Gas"
+        }
       },
       "timer": {
-        "name": "Timer"
+        "name": "Timer",
+        "state": {
+          "off": "Off",
+          "on": "On"
+        }
       }
     },
     "number": {

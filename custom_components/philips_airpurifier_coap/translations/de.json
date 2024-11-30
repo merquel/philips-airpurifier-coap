@@ -113,19 +113,48 @@
     },
     "select": {
       "function": {
-        "name": "Funktion"
+        "name": "Funktion",
+        "state": {
+          "purification": "Reinigung",
+          "purification_humidification": "Reinigung und Befeuchtung",
+          "fan": "Lüfter",
+          "circulation": "Zirkulation",
+          "heating": "Heizung"
+        }
       },
       "lamp_mode": {
-        "name": "Lampen Modus"
+        "name": "Lampen Modus",
+        "state": {
+          "off": "Aus",
+          "air_quality": "Luftqualität",
+          "ambient_light_mode": "Ambiente",
+          "humidity": "Lufteuchtigkeit"
+        }
       },
       "ambient_light_mode": {
-        "name": "Umgebungslicht Modus"
+        "name": "Ambiente Modus",
+        "state": {
+          "off": "Aus",
+          "warm": "Warm",
+          "dawn": "Dämmerung",
+          "calm": "Ruhig",
+          "breath": "Atem"
+        }
       },
       "preferred_index": {
-        "name": "Vorzugsindex"
+        "name": "Vorzugsindex",
+        "state": {
+          "indoor_allergen_index": "Innenraum Allergie Index",
+          "pm25": "PM2.5",
+          "gas": "Gas"
+        }
       },
       "timer": {
-        "name": "Timer"
+        "name": "Timer",
+        "state": {
+          "off": "Aus",
+          "on": "An"
+        }
       }
     },
     "number": {

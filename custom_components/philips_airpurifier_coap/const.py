@@ -220,6 +220,9 @@ class FanFunction(StrEnum):
 
     PURIFICATION = "purification"
     PURIFICATION_HUMIDIFICATION = "purification_humidification"
+    FAN = "fan"
+    HEATING = "heating"
+    CIRCULATION = "circulation"
 
 
 class FanService(StrEnum):
@@ -239,6 +242,7 @@ class FanAttributes(StrEnum):
 
     ACTUAL_FAN_SPEED = "actual_fan_speed"
     AIR_QUALITY_INDEX = "air_quality_index"
+    AIR_QUALITY = "air_quality"
     CHILD_LOCK = "child_lock"
     BEEP = "beep"
     DEVICE_ID = "device_id"
@@ -279,7 +283,7 @@ class FanAttributes(StrEnum):
     MODE = "mode"
     MODEL_ID = "model_id"
     NAME = "name"
-    PM25 = "PM2.5"
+    PM25 = "pm25"
     GAS = "gas_level"
     PREFERRED_INDEX = "preferred_index"
     PRODUCT_ID = "product_id"
@@ -454,46 +458,46 @@ class PhilipsApi:
     NEW2_GAS_PREFERRED_INDEX = "D0312A#2"
 
     LAMP_MODE_MAP = {
-        0: ("Off", ICON.LIGHT_FUNCTION),
-        1: ("Air Quality", ICON.LIGHT_FUNCTION),
-        2: ("Ambient", ICON.LIGHT_FUNCTION),
+        0: (FanAttributes.OFF, ICON.LIGHT_FUNCTION),
+        1: (FanAttributes.AIR_QUALITY, ICON.LIGHT_FUNCTION),
+        2: (FanAttributes.AMBIENT_LIGHT_MODE, ICON.LIGHT_FUNCTION),
     }
     LAMP_MODE_MAP2 = {
-        0: ("Off", ICON.LIGHT_FUNCTION),
-        1: ("Humidity", ICON.LIGHT_FUNCTION),
-        2: ("Ambient", ICON.LIGHT_FUNCTION),
+        0: (FanAttributes.OFF, ICON.LIGHT_FUNCTION),
+        1: (FanAttributes.HUMIDITY, ICON.LIGHT_FUNCTION),
+        2: (FanAttributes.AMBIENT_LIGHT_MODE, ICON.LIGHT_FUNCTION),
     }
     AMBIENT_LIGHT_MODE_MAP = {
-        1: ("Warm", ICON.AMBIENT_LIGHT),
-        2: ("Dawn", ICON.AMBIENT_LIGHT),
-        3: ("Calm", ICON.AMBIENT_LIGHT),
-        4: ("Breath", ICON.AMBIENT_LIGHT),
+        1: ("warm", ICON.AMBIENT_LIGHT),
+        2: ("dawn", ICON.AMBIENT_LIGHT),
+        3: ("calm", ICON.AMBIENT_LIGHT),
+        4: ("breath", ICON.AMBIENT_LIGHT),
     }
     PREFERRED_INDEX_MAP = {
-        "0": ("Indoor Allergen Index", ICON.IAI),
-        "1": ("PM2.5", ICON.PM25),
+        "0": (FanAttributes.INDOOR_ALLERGEN_INDEX, ICON.IAI),
+        "1": (FanAttributes.PM25, ICON.PM25),
     }
     GAS_PREFERRED_INDEX_MAP = {
-        "0": ("Indoor Allergen Index", ICON.IAI),
-        "1": ("PM2.5", ICON.PM25),
-        "2": ("Gas", ICON.GAS),
+        "0": (FanAttributes.INDOOR_ALLERGEN_INDEX, ICON.IAI),
+        "1": (FanAttributes.PM25, ICON.PM25),
+        "2": (FanAttributes.GAS, ICON.GAS),
     }
     NEW_PREFERRED_INDEX_MAP = {
-        "IAI": ("Indoor Allergen Index", ICON.IAI),
-        "PM2.5": ("PM2.5", ICON.PM25),
+        "IAI": (FanAttributes.INDOOR_ALLERGEN_INDEX, ICON.IAI),
+        "PM2.5": (FanAttributes.PM25, ICON.PM25),
     }
     FUNCTION_MAP = {
-        "P": ("Purification", ICON.PURIFICATION_ONLY_MODE),
-        "PH": ("Purification and Humidification", ICON.TWO_IN_ONE_MODE),
+        "P": (FanFunction.PURIFICATION, ICON.PURIFICATION_ONLY_MODE),
+        "PH": (FanFunction.PURIFICATION_HUMIDIFICATION, ICON.TWO_IN_ONE_MODE),
     }
     CIRCULATION_MAP = {
-        1: ("Fan", ICON.CLEAN),
-        2: ("Circulation", ICON.CIRCULATE),
+        1: (FanFunction.FAN, ICON.CLEAN),
+        2: (FanFunction.CIRCULATION, ICON.CIRCULATE),
     }
     HEATING_MAP = {
-        1: ("Fan", ICON.CLEAN),
-        2: ("Circulation", ICON.CIRCULATE),
-        3: ("Heating", ICON.HEATING),
+        1: (FanFunction.FAN, ICON.CLEAN),
+        2: (FanFunction.CIRCULATION, ICON.CIRCULATE),
+        3: (FanFunction.HEATING, ICON.HEATING),
     }
     TIMER_MAP = {
         0: ("Off", "mdi:clock-plus"),
