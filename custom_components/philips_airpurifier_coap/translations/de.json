@@ -25,10 +25,18 @@
   "entity": {
     "binary_sensor": {
       "water_tank": {
-        "name": "Wassertank"
+        "name": "Wassertank",
+        "state": {
+          "on": "Gefüllt",
+          "off": "Leer"
+        }
       },
       "humidification": {
-        "name": "Luftbefeuchtung"
+        "name": "Luftbefeuchtung",
+        "state": {
+          "on": "An",
+          "off": "Aus"
+        }
       }
     },
     "sensor": {

@@ -25,10 +25,18 @@
   "entity": {
     "binary_sensor": {
       "water_tank": {
-        "name": "Water tank"
+        "name": "Water tank",
+        "state": {
+          "on": "Not empty",
+          "off": "Empty"
+        }
       },
       "humidification": {
-        "name": "Humidification"
+        "name": "Humidification",
+        "state": {
+          "on": "On",
+          "off": "Off"
+        }
       }
     },
     "sensor": {
