@@ -21,5 +21,112 @@
       "host": "Device address is required",
       "connect": "Cannot connect to device"
     }
+  },
+  "entity": {
+    "binary_sensor": {
+      "water_tank": {
+        "name": "Water tank"
+      },
+      "humidification": {
+        "name": "Humidification"
+      }
+    },
+    "sensor": {
+      "indoor_allergen_index": {
+        "name": "Indoor allergen index"
+      },
+      "pm25": {
+        "name": "PM2.5"
+      },
+      "gas": {
+        "name": "Gas"
+      },
+      "total_volatile_organic_compounds": {
+        "name": "Total volatile organic compounds"
+      },
+      "humidity": {
+        "name": "Humidity"
+      },
+      "time_remaining": {
+        "name": "Time remaining"
+      },
+      "temperature": {
+        "name": "Temperature"
+      },
+      "water_level": {
+        "name": "Water level"
+      },
+      "rssi": {
+        "name": "RSSI"
+      },
+      "pre_filter": {
+        "name": "Pre-filter"
+      },
+      "hepa_filter": {
+        "name": "HEPA filter"
+      },
+      "active_carbon_filter": {
+        "name": "Active carbon filter"
+      },
+      "wick": {
+        "name": "Wick"
+      },
+      "nanoprotect_filter": {
+        "name": "NanoProtect filter"
+      }
+    },
+    "switch": {
+      "child_lock": {
+        "name": "Child lock"
+      },
+      "beep": {
+        "name": "Beep"
+      },
+      "standby_sensors": {
+        "name": "Standby sensors"
+      },
+      "auto_plus": {
+        "name": "Auto plus"
+      },
+      "auto_quickdry_mode": {
+        "name": "Auto quickdry mode"
+      },
+      "quickdry_mode": {
+        "name": "Quickdry mode"
+      }
+    },
+    "light": {
+      "display_backlight": {
+        "name": "Display backlight"
+      },
+      "light_brightness": {
+        "name": "Light brightness"
+      }
+    },
+    "select": {
+      "function": {
+        "name": "Function"
+      },
+      "lamp_mode": {
+        "name": "Lamp mode"
+      },
+      "ambient_light_mode": {
+        "name": "Ambient light mode"
+      },
+      "preferred_index": {
+        "name": "Preferred index"
+      },
+      "timer": {
+        "name": "Timer"
+      }
+    },
+    "number": {
+      "oscillaton": {
+        "name": "Oscillation"
+      },
+      "target_temp": {
+        "name": "Target temperature"
+      }
+    }
   }
 }

@@ -112,9 +112,7 @@ class PhilipsSensor(PhilipsEntity, SensorEntity):
         self._attr_state_class = self._description.get(ATTR_STATE_CLASS)
         self._attr_device_class = self._description.get(ATTR_DEVICE_CLASS)
         self._attr_entity_category = self._description.get(CONF_ENTITY_CATEGORY)
-        self._attr_name = (
-            f"{self._description[FanAttributes.LABEL].replace('_', ' ').title()}"
-        )
+        self._attr_translation_key = self._description.get(FanAttributes.LABEL)
         self._attr_native_unit_of_measurement = self._description.get(
             FanAttributes.UNIT
         )
@@ -173,13 +171,11 @@ class PhilipsFilterSensor(PhilipsEntity, SensorEntity):
             else None
         )
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
-        self._attr_name = (
-            f"{self._description[FanAttributes.LABEL].replace('_', ' ').title()}"
-        )
 
         self._value_key = kind
         self._total_key = self._description[FanAttributes.TOTAL]
         self._type_key = self._description[FanAttributes.TYPE]
+        self._attr_translation_key = self._description.get(FanAttributes.LABEL)
 
         if self._has_total:
             self._attr_native_unit_of_measurement = PERCENTAGE

@@ -74,9 +74,7 @@ class PhilipsSwitch(PhilipsEntity, SwitchEntity):
         self._off = self._description.get(SWITCH_OFF)
         self._attr_device_class = self._description.get(ATTR_DEVICE_CLASS)
         self._attr_icon = self._description.get(ATTR_ICON)
-        self._attr_name = (
-            f"{self._description[FanAttributes.LABEL].replace('_', ' ').title()}"
-        )
+        self._attr_translation_key = self._description.get(FanAttributes.LABEL)
         self._attr_entity_category = self._description.get(CONF_ENTITY_CATEGORY)
 
         model = config_entry_data.device_information.model

@@ -73,9 +73,7 @@ class PhilipsBinarySensor(PhilipsEntity, BinarySensorEntity):
         )
         self._attr_device_class = self._description.get(ATTR_DEVICE_CLASS)
         self._attr_entity_category = self._description.get(CONF_ENTITY_CATEGORY)
-        self._attr_name = (
-            f"{self._description[FanAttributes.LABEL].replace('_', ' ').title()}"
-        )
+        self._attr_translation_key = self._description.get(FanAttributes.LABEL)
 
         model = config_entry_data.device_information.model
         device_id = config_entry_data.device_information.device_id

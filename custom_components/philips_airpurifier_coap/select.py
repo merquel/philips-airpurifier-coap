@@ -73,7 +73,7 @@ class PhilipsSelect(PhilipsEntity, SelectEntity):
         self._attr_device_class = self._description.get(ATTR_DEVICE_CLASS)
         label = FanAttributes.LABEL
         label = label.partition("#")[0]
-        self._attr_name = f"{self._description[label].replace('_', ' ').title()}"
+        self._attr_translation_key = self._description.get(FanAttributes.LABEL)
         self._attr_entity_category = self._description.get(CONF_ENTITY_CATEGORY)
 
         self._attr_options = []

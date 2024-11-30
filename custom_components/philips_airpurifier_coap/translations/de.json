@@ -2,38 +2,38 @@
   "title": "Philips AirPurifier",
   "config": {
     "abort": {
-      "already_configured": "Device already configured",
-      "model_unsupported": "Model unsupported",
-      "timeout": "Timeout, cannot connect to device"
+      "already_configured": "Gerät is bereits konfiguriert",
+      "model_unsupported": "Modell nicht unterstützt",
+      "timeout": "Timeout, Verbindung zum Gerät nicht möglich"
     },
     "step": {
       "user": {
-        "title": "New Philips AirPurifier",
+        "title": "Neuer Philips AirPurifier",
         "data": {
-          "host": "Device hostname or IP address"
+          "host": "Host Name des Geräts oder IP Addresse"
         }
       },
       "confirm": {
-        "description": "Do you want to setup {model} {name}?"
+        "description": "Modell {model} {name} einrichten?"
       }
     },
     "error": {
-      "host": "Device address is required",
-      "connect": "Cannot connect to device"
+      "host": "Adress des Geräts ist erforderlich",
+      "connect": "Verbindung zum Gerät nicht möglich"
     }
   },
   "entity": {
     "binary_sensor": {
       "water_tank": {
-        "name": "Water tank"
+        "name": "Wassertank"
       },
       "humidification": {
-        "name": "Humidification"
+        "name": "Luftbefeuchtung"
       }
     },
     "sensor": {
       "indoor_allergen_index": {
-        "name": "Indoor allergen index"
+        "name": "Innenraum Allergie Index"
       },
       "pm25": {
         "name": "PM2.5"
@@ -42,79 +42,79 @@
         "name": "Gas"
       },
       "total_volatile_organic_compounds": {
-        "name": "Total volatile organic compounds"
+        "name": "Flüchtige organische Verbindungen insgesamt"
       },
       "humidity": {
-        "name": "Humidity"
+        "name": "Luftfeuchtigkeit"
       },
       "time_remaining": {
-        "name": "Time remaining"
+        "name": "Verbleibende Zeit"
       },
       "temperature": {
-        "name": "Temperature"
+        "name": "Temperatur"
       },
       "water_level": {
-        "name": "Water level"
+        "name": "Wasserstand"
       },
       "rssi": {
         "name": "RSSI"
       },
       "pre_filter": {
-        "name": "Pre-filter"
+        "name": "Vorfilter"
       },
       "hepa_filter": {
-        "name": "HEPA filter"
+        "name": "HEPA Filter"
       },
       "active_carbon_filter": {
-        "name": "Active carbon filter"
+        "name": "Aktivkohle Filter"
       },
       "wick": {
-        "name": "Wick"
+        "name": "Befeuchtungselement"
       },
       "nanoprotect_filter": {
-        "name": "NanoProtect filter"
+        "name": "NanoProtect Filter"
       }
     },
     "switch": {
       "child_lock": {
-        "name": "Child lock"
+        "name": "Kindersicherung"
       },
       "beep": {
-        "name": "Beep"
+        "name": "Piepton"
       },
       "standby_sensors": {
-        "name": "Standby sensors"
+        "name": "Standby Sensoren"
       },
       "auto_plus": {
-        "name": "Auto plus"
+        "name": "Auto Plus"
       },
       "auto_quickdry_mode": {
-        "name": "Auto quickdry mode"
+        "name": "Auto Schnelltrocknen Modus"
       },
       "quickdry_mode": {
-        "name": "Quickdry mode"
+        "name": "Schnelltrocken Modus"
       }
     },
     "light": {
       "display_backlight": {
-        "name": "Display backlight"
+        "name": "Hintergrundbeleuchtung"
       },
       "light_brightness": {
-        "name": "Light brightness"
+        "name": "Helligkeit"
       }
     },
     "select": {
       "function": {
-        "name": "Function"
+        "name": "Funktion"
       },
       "lamp_mode": {
-        "name": "Lamp mode"
+        "name": "Lampen Modus"
       },
       "ambient_light_mode": {
-        "name": "Ambient light mode"
+        "name": "Umgebungslicht Modus"
       },
       "preferred_index": {
-        "name": "Preferred index"
+        "name": "Vorzugsindex"
       },
       "timer": {
         "name": "Timer"
@@ -122,10 +122,10 @@
     },
     "number": {
       "oscillaton": {
-        "name": "Oscillation"
+        "name": "Oszillation"
       },
       "target_temp": {
-        "name": "Target temperature"
+        "name": "Ziel Temperature"
       }
     }
   }
