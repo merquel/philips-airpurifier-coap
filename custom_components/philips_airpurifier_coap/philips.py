@@ -56,20 +56,16 @@ class PhilipsEntity(Entity):
         self._attr_device_info = DeviceInfo(
             name=name,
             manufacturer=MANUFACTURER,
-            model=list(
-                filter(
-                    None,
-                    map(
-                        self._device_status.get,
-                        [
-                            PhilipsApi.MODEL_ID,
-                            PhilipsApi.NEW_MODEL_ID,
-                            PhilipsApi.NEW2_MODEL_ID,
-                        ],
-                    ),
-                )
-            )[0],
-            sw_version=self._device_status["WifiVersion"],
+            model=next(
+                self._device_status.get(key)
+                for key in [
+                    PhilipsApi.MODEL_ID,
+                    PhilipsApi.NEW_MODEL_ID,
+                    PhilipsApi.NEW2_MODEL_ID,
+                ]
+                if self._device_status.get(key)
+            ),
+            sw_version=self._device_status[PhilipsApi.WIFI_VERSION],
             serial_number=self._device_status[PhilipsApi.DEVICE_ID],
             identifiers={(DOMAIN, self._device_status[PhilipsApi.DEVICE_ID])},
             connections={
@@ -213,19 +209,18 @@ class PhilipsGenericFanBase(PhilipsGenericControlBase, FanEntity):
 
         super().__init__(hass, entry, config_entry_data)
 
-        self._attr_name = list(
-            filter(
-                None,
-                map(
-                    self._device_status.get,
-                    [
-                        PhilipsApi.NAME,
-                        PhilipsApi.NEW_NAME,
-                        PhilipsApi.NEW2_NAME,
-                    ],
-                ),
+        self._attr_name = next(
+            name
+            for name in (
+                self._device_status.get(key)
+                for key in [
+                    PhilipsApi.NAME,
+                    PhilipsApi.NEW_NAME,
+                    PhilipsApi.NEW2_NAME,
+                ]
             )
-        )[0]
+            if name
+        )
         model = config_entry_data.device_information.model
         device_id = config_entry_data.device_information.device_id
         self._attr_unique_id = f"{model}-{device_id}"
