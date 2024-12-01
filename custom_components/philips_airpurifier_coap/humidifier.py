@@ -144,8 +144,8 @@ class PhilipsHumidifier(PhilipsGenericControlBase, HumidifierEntity):
         if self._switch:
             function_status = self._device_status.get(self._function_key)
             if function_status == self._description[FanAttributes.HUMIDIFYING]:
-                return FanAttributes.HUMIDIFICATION
-            return FanAttributes.PURIFICATION
+                return FanFunction.PURIFICATION_HUMIDIFICATION
+            return FanFunction.PURIFICATION
 
         # then we treat pure humidification devices
         if self._function_key == self._power_key:
