@@ -12,7 +12,6 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.const import (
     ATTR_DEVICE_CLASS,
-    ATTR_ICON,
     ATTR_TEMPERATURE,
     CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
     CONF_ENTITY_CATEGORY,
@@ -489,7 +488,7 @@ class PhilipsApi:
     }
     TIMER_MAP = {
         0: "Off",
-        1: "0.5h",
+        1: "30min",
         2: "1h",
         3: "2h",
         4: "3h",

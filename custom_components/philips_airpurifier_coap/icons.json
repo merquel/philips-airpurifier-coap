@@ -186,7 +186,7 @@
         "default": "mdi:clock-plus",
         "state": {
           "off": "mdi:clock-plus",
-          "0.5h": "mdi:clock-time-one",
+          "30min": "mdi:clock-time-one",
           "1h": "mdi:clock-time-one",
           "2h": "mdi:clock-time-two",
           "3h": "mdi:clock-time-three",
