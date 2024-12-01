@@ -20,6 +20,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_NAME
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.device_registry import format_mac
 
 from .config_entry_data import ConfigEntryData
@@ -51,6 +52,8 @@ PLATFORMS = [
     "sensor",
     "switch",
 ]
+
+CONFIG_SCHEMA = cv.empty_config_schema
 
 
 # icons code thanks to Thomas Loven:
