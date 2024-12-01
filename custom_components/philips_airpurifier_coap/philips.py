@@ -406,6 +406,8 @@ class PhilipsGenericFanBase(PhilipsGenericControlBase, FanEntity):
     @property
     def icon(self) -> str:
         """Return the icon of the fan."""
+        # the fan uses the preset modes as collected from the classes
+        # unfortunately, this cannot be controlled from the icon translation
 
         if not self.is_on:
             return ICON.POWER_BUTTON

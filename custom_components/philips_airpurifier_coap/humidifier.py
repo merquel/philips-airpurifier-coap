@@ -17,7 +17,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import Entity
 
 from .config_entry_data import ConfigEntryData
-from .const import ATTR_ICON, DOMAIN, HUMIDIFIER_TYPES, FanAttributes, FanFunction
+from .const import DOMAIN, HUMIDIFIER_TYPES, FanAttributes, FanFunction
 from .philips import PhilipsGenericControlBase, model_to_class
 
 _LOGGER = logging.getLogger(__name__)
@@ -241,8 +241,3 @@ class PhilipsHumidifier(PhilipsGenericControlBase, HumidifierEntity):
         )
         self._device_status[self._humidity_target_key] = humidity
         self._handle_coordinator_update()
-
-    @property
-    def icon(self) -> str:
-        """Return the icon."""
-        return self._description[ATTR_ICON]

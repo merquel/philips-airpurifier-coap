@@ -76,15 +76,8 @@ class PhilipsSelect(PhilipsEntity, SelectEntity):
         self._attr_translation_key = self._description.get(FanAttributes.LABEL)
         self._attr_entity_category = self._description.get(CONF_ENTITY_CATEGORY)
 
-        self._attr_options = []
-        self._icons = {}
-        self._options = {}
-        options = self._description.get(OPTIONS)
-        for key, option_tuple in options.items():
-            option_name, icon = option_tuple
-            self._attr_options.append(option_name)
-            self._icons[option_name] = icon
-            self._options[key] = option_name
+        self._options = self._description.get(OPTIONS)
+        self._attr_options = list(self._options.values())
 
         model = config_entry_data.device_information.model
         device_id = config_entry_data.device_information.device_id
@@ -97,10 +90,11 @@ class PhilipsSelect(PhilipsEntity, SelectEntity):
     def current_option(self) -> str:
         """Return the currently selected option."""
         option = self._device_status.get(self.kind)
-        _LOGGER.debug("current_option: %s", option)
-        if option in self._options:
-            return self._options[option]
-        return None
+        current_option = str(self._options.get(option))
+        _LOGGER.debug(
+            "option: %s, returning as current_option: %s", option, current_option
+        )
+        return current_option
 
     async def async_select_option(self, option: str) -> None:
         """Select an option."""
@@ -125,8 +119,3 @@ class PhilipsSelect(PhilipsEntity, SelectEntity):
             _LOGGER.error("Invalid option key: '%s' with error: %s", option, e)
         except ValueError as e:
             _LOGGER.error("Invalid value for option: '%s' with error: %s", option, e)
-
-    @property
-    def icon(self) -> str:
-        """Return the icon."""
-        return self._icons.get(self.current_option)

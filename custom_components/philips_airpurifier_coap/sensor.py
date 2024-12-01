@@ -136,6 +136,9 @@ class PhilipsSensor(PhilipsEntity, SensorEntity):
     @property
     def icon(self) -> str:
         """Return the icon of the sensor."""
+
+        # if the sensor has an icon map, use it to determine the icon
+        # otherwise, we return the default icon, which might be None and then uses icon translation
         icon = self._norm_icon
         if not self._icon_map:
             return icon
@@ -164,7 +167,7 @@ class PhilipsFilterSensor(PhilipsEntity, SensorEntity):
         self._model = config_entry_data.device_information.model
 
         self._description = FILTER_TYPES[kind]
-        self._icon_map = self._description[FanAttributes.ICON_MAP]
+        self._icon_map = self._description.get(FanAttributes.ICON_MAP)
         self._norm_icon = (
             next(iter(self._icon_map.items()))[1]
             if self._icon_map is not None
@@ -237,6 +240,9 @@ class PhilipsFilterSensor(PhilipsEntity, SensorEntity):
     @property
     def icon(self) -> str:
         """Return the icon of the sensor."""
+
+        # if the sensor has an icon map, use it to determine the icon
+        # otherwise, we return the default icon, which might be None and then uses icon translation
         icon = self._norm_icon
         if not self._icon_map:
             return icon
