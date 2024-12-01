@@ -23,6 +23,81 @@
     }
   },
   "entity": {
+    "fan": {
+      "pap": {
+        "state_attributes": {
+          "preset_mode": {
+            "name": "Modus",
+            "state": {
+              "auto": "Auto",
+              "auto_general": "Auto/Allgemein",
+              "auto_plus": "Auto+",
+              "bacteria": "Bakterien",
+              "allergen": "Allergie",
+              "gentle": "Sanft",
+              "night": "Nacht",
+              "sleep": "Schlaf",
+              "sleep_allergy": "Schlaf/Allergie",
+              "turbo": "Turbo",
+              "medium": "Medium",
+              "gas": "Gas",
+              "pollution": "Verschmutzung",
+              "low": "Niedrig",
+              "high": "Hoch",
+              "ventilation": "Durchlüftung",
+              "natural": "Natürlich",
+              "speed_1": "Speed 1",
+              "gentle_speed_1": "Sanft/Speed 1",
+              "speed_2": "Speed 2",
+              "speed_3": "Speed 3",
+              "speed_4": "Speed 4",
+              "speed_5": "Speed 5",
+              "speed_6": "Speed 6",
+              "speed_7": "Speed 7",
+              "speed_8": "Speed 8",
+              "speed_9": "Speed 9",
+              "speed_10": "Speed 10"
+            }
+          }
+        }
+      }
+    },
+    "humidifier": {
+      "pap": {
+        "state": {
+          "on": "An",
+          "off": "Aus"
+        },
+        "state_attributes": {
+          "mode": {
+            "state": {
+              "purification": "Reinigung",
+              "purification_humidification": "Reinigung und Befeuchtung",
+              "auto": "Auto",
+              "allergen": "Allergie",
+              "sleep": "Schlaf",
+              "night": "Nacht",
+              "turbo": "Turbo",
+              "high": "Hoch",
+              "medium": "Medium",
+              "speed_1": "Speed 1",
+              "speed_2": "Speed 2",
+              "speed_3": "Speed 3"
+            }
+          },
+          "action": {
+            "state": {
+              "off": "Aus",
+              "humidifying": "Befeuchtung",
+              "idle": "Leerlauf"
+            }
+          },
+          "current_humidity": {
+            "name": "Aktuelle Luftfeuchtigkeit"
+          }
+        }
+      }
+    },
     "binary_sensor": {
       "water_tank": {
         "name": "Wassertank",

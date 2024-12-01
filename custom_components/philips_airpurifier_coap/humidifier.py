@@ -17,7 +17,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import Entity
 
 from .config_entry_data import ConfigEntryData
-from .const import ATTR_ICON, DOMAIN, HUMIDIFIER_TYPES, FanAttributes
+from .const import ATTR_ICON, DOMAIN, HUMIDIFIER_TYPES, FanAttributes, FanFunction
 from .philips import PhilipsGenericControlBase, model_to_class
 
 _LOGGER = logging.getLogger(__name__)
@@ -107,8 +107,8 @@ class PhilipsHumidifier(PhilipsGenericControlBase, HumidifierEntity):
         if self._switch:
             self._attr_supported_features = HumidifierEntityFeature.MODES
             self._attr_available_modes = {
-                FanAttributes.PURIFICATION,
-                FanAttributes.HUMIDIFICATION,
+                FanFunction.PURIFICATION,
+                FanFunction.PURIFICATION_HUMIDIFICATION,
             }
 
         # pure humidification devices are identified by the function being the power and have the fan modes as modes

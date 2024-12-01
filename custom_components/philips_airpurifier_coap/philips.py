@@ -23,6 +23,7 @@ from .const import (
     DOMAIN,
     ICON,
     MANUFACTURER,
+    PAP,
     SWITCH_OFF,
     SWITCH_ON,
     FanAttributes,
@@ -111,6 +112,7 @@ class PhilipsGenericControlBase(PhilipsEntity):
     REPLACE_PRESET = None
 
     _attr_name = None
+    _attr_translation_key = PAP
 
     def __init__(
         self,
