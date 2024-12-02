@@ -53,7 +53,7 @@ PLATFORMS = [
     "switch",
 ]
 
-CONFIG_SCHEMA = cv.empty_config_schema
+CONFIG_SCHEMA = cv.empty_config_schema(DOMAIN)
 
 
 # icons code thanks to Thomas Loven:
