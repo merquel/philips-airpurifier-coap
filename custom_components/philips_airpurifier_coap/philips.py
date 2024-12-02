@@ -23,6 +23,7 @@ from .const import (
     DOMAIN,
     ICON,
     MANUFACTURER,
+    PAP,
     SWITCH_OFF,
     SWITCH_ON,
     FanAttributes,
@@ -30,12 +31,15 @@ from .const import (
     PhilipsApi,
     PresetMode,
 )
+from .helpers import extract_model
 
 _LOGGER = logging.getLogger(__name__)
 
 
 class PhilipsEntity(Entity):
     """Class to represent a generic Philips entity."""
+
+    _attr_has_entity_name = True
 
     def __init__(
         self,
@@ -51,25 +55,15 @@ class PhilipsEntity(Entity):
         self.config_entry = entry
         self.config_entry_data = config_entry_data
         self.coordinator = self.config_entry_data.coordinator
+
         name = self.config_entry_data.device_information.name
+        model = extract_model(self._device_status)
 
         self._attr_device_info = DeviceInfo(
             name=name,
             manufacturer=MANUFACTURER,
-            model=list(
-                filter(
-                    None,
-                    map(
-                        self._device_status.get,
-                        [
-                            PhilipsApi.MODEL_ID,
-                            PhilipsApi.NEW_MODEL_ID,
-                            PhilipsApi.NEW2_MODEL_ID,
-                        ],
-                    ),
-                )
-            )[0],
-            sw_version=self._device_status["WifiVersion"],
+            model=model,
+            sw_version=self._device_status[PhilipsApi.WIFI_VERSION],
             serial_number=self._device_status[PhilipsApi.DEVICE_ID],
             identifiers={(DOMAIN, self._device_status[PhilipsApi.DEVICE_ID])},
             connections={
@@ -116,6 +110,9 @@ class PhilipsGenericControlBase(PhilipsEntity):
     AVAILABLE_ATTRIBUTES = []
     AVAILABLE_PRESET_MODES = {}
     REPLACE_PRESET = None
+
+    _attr_name = None
+    _attr_translation_key = PAP
 
     def __init__(
         self,
@@ -213,19 +210,18 @@ class PhilipsGenericFanBase(PhilipsGenericControlBase, FanEntity):
 
         super().__init__(hass, entry, config_entry_data)
 
-        self._attr_name = list(
-            filter(
-                None,
-                map(
-                    self._device_status.get,
-                    [
-                        PhilipsApi.NAME,
-                        PhilipsApi.NEW_NAME,
-                        PhilipsApi.NEW2_NAME,
-                    ],
-                ),
-            )
-        )[0]
+        # self._attr_name = next(
+        #     name
+        #     for name in (
+        #         self._device_status.get(key)
+        #         for key in [
+        #             PhilipsApi.NAME,
+        #             PhilipsApi.NEW_NAME,
+        #             PhilipsApi.NEW2_NAME,
+        #         ]
+        #     )
+        #     if name
+        # )
         model = config_entry_data.device_information.model
         device_id = config_entry_data.device_information.device_id
         self._attr_unique_id = f"{model}-{device_id}"
@@ -410,6 +406,8 @@ class PhilipsGenericFanBase(PhilipsGenericControlBase, FanEntity):
     @property
     def icon(self) -> str:
         """Return the icon of the fan."""
+        # the fan uses the preset modes as collected from the classes
+        # unfortunately, this cannot be controlled from the icon translation
 
         if not self.is_on:
             return ICON.POWER_BUTTON

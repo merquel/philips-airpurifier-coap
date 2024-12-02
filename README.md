@@ -210,6 +210,7 @@ The integration also provides the original Philips icons for your use in the fro
 |------------------------------------------------------------------------------------------------|-------------------------|
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/power_button.svg)            | power_button            |
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/child_lock_button.svg)       | child_lock_button       |
+| ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/child_lock_button_open.svg)  | child_lock_button_open  |
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/auto_mode_button.svg)        | auto_mode_button        |
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/fan_speed_button.svg)        | fan_speed_button        |
 | ![Preview](./custom_components/philips_airpurifier_coap/icons/pap/humidity_button.svg)         | humidity_button         |
