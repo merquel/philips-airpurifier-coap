@@ -1986,7 +1986,10 @@ class PhilipsHU5710(PhilipsNew2GenericFan):
         PhilipsApi.NEW2_AMBIENT_LIGHT_MODE,
     ]
     # AVAILABLE_NUMBERS = [PhilipsApi.NEW2_HUMIDITY_TARGET2]
-    AVAILABLE_BINARY_SENSORS = [PhilipsApi.NEW2_ERROR_CODE]
+    AVAILABLE_BINARY_SENSORS = [
+        PhilipsApi.NEW2_ERROR_CODE,
+        PhilipsApi.NEW2_ERROR_CODE2,    
+    ]
     AVAILABLE_HUMIDIFIERS = [PhilipsApi.NEW2_HUMIDITY_TARGET2]
 
 

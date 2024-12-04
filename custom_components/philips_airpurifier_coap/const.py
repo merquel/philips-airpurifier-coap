@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from enum import StrEnum
 
+from homeassistant.components.binary_sensor import BinarySensorDeviceClass
 from homeassistant.components.number import NumberDeviceClass
 from homeassistant.components.sensor import (
     ATTR_STATE_CLASS,
@@ -313,6 +314,7 @@ class FanAttributes(StrEnum):
     WATER_TANK = "water_tank"
     AUTO_QUICKDRY_MODE = "auto_quickdry_mode"
     QUICKDRY_MODE = "quickdry_mode"
+    UPPER_UNIT = "upper_unit"
 
 
 class FanUnits(StrEnum):
@@ -426,7 +428,8 @@ class PhilipsApi:
     NEW2_PM25 = "D03221"
     NEW2_GAS = "D03122"
     NEW2_HUMIDITY = "D03125"
-    NEW2_ERROR_CODE = "D03240"
+    NEW2_ERROR_CODE = "D03240#1"
+    NEW2_ERROR_CODE2 = "D03240#2"
     NEW2_HUMIDITY_TARGET = "D03128#1"
     NEW2_HUMIDITY_TARGET2 = "D03128#2"
     NEW2_HUMIDIFYING = "D0312B"
@@ -730,6 +733,18 @@ BINARY_SENSOR_TYPES: dict[str, SensorDescription] = {
         FanAttributes.LABEL: FanAttributes.HUMIDIFICATION,
         FanAttributes.VALUE: lambda value: value == 4,
     },
+    PhilipsApi.NEW2_ERROR_CODE2: {
+        # Test for unit not assembled error bit 10-13
+        FanAttributes.ICON_MAP: {
+            True: "mdi:wrench-cog",
+            False: "mdi:wrench-check",
+        },
+        FanAttributes.LABEL: FanAttributes.UPPER_UNIT,
+        ATTR_DEVICE_CLASS: BinarySensorDeviceClass.OPENING,
+        FanAttributes["VALUE"]: lambda value: (value & 0xF000) == 0xC000,
+        CONF_ENTITY_CATEGORY: EntityCategory.DIAGNOSTIC,
+    },
+}
 }
 
 FILTER_TYPES: dict[str, FilterDescription] = {
