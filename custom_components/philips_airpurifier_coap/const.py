@@ -745,7 +745,6 @@ BINARY_SENSOR_TYPES: dict[str, SensorDescription] = {
         CONF_ENTITY_CATEGORY: EntityCategory.DIAGNOSTIC,
     },
 }
-}
 
 FILTER_TYPES: dict[str, FilterDescription] = {
     PhilipsApi.FILTER_PRE: {
@@ -835,6 +834,7 @@ SWITCH_TYPES: dict[str, SwitchDescription] = {
     PhilipsApi.NEW2_STANDBY_SENSORS: {
         ATTR_ICON: "mdi:power-settings",
         FanAttributes.LABEL: FanAttributes.STANDBY_SENSORS,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         SWITCH_ON: 1,
         SWITCH_OFF: 0,
     },
@@ -847,6 +847,7 @@ SWITCH_TYPES: dict[str, SwitchDescription] = {
     PhilipsApi.NEW2_AUTO_QUICKDRY_MODE: {
         ATTR_ICON: "mdi:clock-fast",
         FanAttributes.LABEL: FanAttributes.AUTO_QUICKDRY_MODE,
+        CONF_ENTITY_CATEGORY: EntityCategory.CONFIG,
         SWITCH_ON: 1,
         SWITCH_OFF: 0,
     },
