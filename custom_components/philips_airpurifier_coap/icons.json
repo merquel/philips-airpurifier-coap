@@ -87,6 +87,13 @@
           "on": "pap:two_in_one_mode",
           "off": "pap:purification_only_mode"
         }
+      },
+      "upper_unit": {
+        "name": "Upper unit",
+        "state": {
+          "on": "mdi:wrench-cog",
+          "off": "mdi:wrench-check"
+        }
       }
     },
     "sensor": {
@@ -131,10 +138,10 @@
         "default": "mdi:format-annotation-plus"
       },
       "auto_quickdry_mode": {
-        "default": "mdi:clock-fast"
+        "default": "mdi:fan-auto"
       },
       "quickdry_mode": {
-        "default": "mdi:clock-fast"
+        "default": "mdi:fan"
       }
     },
     "light": {

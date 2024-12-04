@@ -112,7 +112,10 @@
           "on": "On",
           "off": "Off"
         }
-      }
+      },
+      "upper_unit": {
+        "name": "Upper unit"
+      }     
     },
     "sensor": {
       "indoor_allergen_index": {

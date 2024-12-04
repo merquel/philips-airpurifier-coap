@@ -699,10 +699,6 @@ BINARY_SENSOR_TYPES: dict[str, SensorDescription] = {
     },
     PhilipsApi.NEW2_ERROR_CODE2: {
         # Test for unit not assembled error bit 10-13
-        FanAttributes.ICON_MAP: {
-            True: "mdi:wrench-cog",
-            False: "mdi:wrench-check",
-        },
         FanAttributes.LABEL: FanAttributes.UPPER_UNIT,
         ATTR_DEVICE_CLASS: BinarySensorDeviceClass.OPENING,
         FanAttributes["VALUE"]: lambda value: (value & 0xF000) == 0xC000,
