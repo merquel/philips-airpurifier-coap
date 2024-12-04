@@ -13,11 +13,14 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import Entity
 
 from .config_entry_data import ConfigEntryData
-from .const import BINARY_SENSOR_TYPES, DOMAIN, FanAttributes
+from .const import BINARY_SENSOR_TYPES, DOMAIN, FanAttributes, PhilipsApi
 from .philips import PhilipsEntity, model_to_class
 
 _LOGGER = logging.getLogger(__name__)
 
+# Split shared keys to match the base key
+def base_key(key: str) -> str:
+    return key.split("#")[0]
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -42,7 +45,7 @@ async def async_setup_entry(
     binary_sensors = [
         PhilipsBinarySensor(hass, entry, config_entry_data, binary_sensor)
         for binary_sensor in BINARY_SENSOR_TYPES
-        if binary_sensor in status and binary_sensor in available_binary_sensors
+        if base_key(binary_sensor) in status and binary_sensor in available_binary_sensors
     ]
 
     async_add_entities(binary_sensors, update_before_add=False)
@@ -66,6 +69,7 @@ class PhilipsBinarySensor(PhilipsEntity, BinarySensorEntity):
         name = config_entry_data.device_information.name
 
         self._description = BINARY_SENSOR_TYPES[kind]
+        label = self._description[FanAttributes.LABEL]
         self._icon_map = self._description.get(FanAttributes.ICON_MAP)
         self._norm_icon = (
             next(iter(self._icon_map.items()))[1]
@@ -80,7 +84,7 @@ class PhilipsBinarySensor(PhilipsEntity, BinarySensorEntity):
 
         model = config_entry_data.device_information.model
         device_id = config_entry_data.device_information.device_id
-        self._attr_unique_id = f"{model}-{device_id}-{kind.lower()}"
+        self._attr_unique_id = f"{model}-{device_id}-{kind.lower()}-{label.lower()}"
 
         self._attrs: dict[str, Any] = {}
         self.kind = kind
@@ -88,7 +92,7 @@ class PhilipsBinarySensor(PhilipsEntity, BinarySensorEntity):
     @property
     def is_on(self) -> bool:
         """Return the state of the binary sensor."""
-        value = self._device_status[self.kind]
+        value = self._device_status.get(base_key(self.kind))
         convert = self._description.get(FanAttributes.VALUE)
         if convert:
             value = convert(value)
